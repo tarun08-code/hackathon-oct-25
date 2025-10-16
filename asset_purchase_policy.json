@@ -1,0 +1,57 @@
+{
+  "policy_name": "ABC Company Asset Purchase Policy",
+  "version": "1.0",
+  "effective_date": "2025-01-01",
+  "policy_rules": {
+    "IC": {
+      "level_name": "Individual Contributor",
+      "purchase_limit": 3000,
+      "currency": "USD",
+      "approved_items": [
+        "Laptop (up to $2000)",
+        "Monitor",
+        "Keyboard & Mouse",
+        "Office supplies"
+      ],
+      "approval_required": false,
+      "notes": "Standard equipment for IC roles"
+    },
+    "Senior IC": {
+      "level_name": "Senior Individual Contributor",
+      "purchase_limit": 10000,
+      "currency": "USD",
+      "approved_items": [
+        "MacBook Pro",
+        "Multiple monitors",
+        "Premium peripherals",
+        "Company car & associated expenses",
+        "Professional development tools"
+      ],
+      "approval_required": false,
+      "notes": "Enhanced benefits for senior contributors"
+    },
+    "Manager": {
+      "level_name": "Manager",
+      "purchase_limit": 25000,
+      "currency": "USD",
+      "approved_items": [
+        "MacBook Pro",
+        "Premium workstation setup",
+        "Company car & associated expenses",
+        "Business travel expenses",
+        "Team building activities budget",
+        "Professional development tools",
+        "Conference attendance"
+      ],
+      "approval_required": true,
+      "approval_level": "Director",
+      "notes": "Leadership-level benefits with director approval required"
+    }
+  },
+  "general_notes": [
+    "All purchases must be work-related",
+    "Receipts required for reimbursement",
+    "Company asset policy applies to all purchases",
+    "Unused budget does not carry over to next period"
+  ]
+}
