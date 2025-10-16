@@ -12,7 +12,7 @@ from employee_lookup_agent import EmployeeLookupAgent
 def run_demo():
     """Run demonstration for all employees"""
     print("="*70)
-    print("🎬 EMPLOYEE LOOKUP AGENT - DEMO MODE")
+    print("EMPLOYEE LOOKUP AGENT - DEMO MODE")
     print("="*70)
     
     try:
@@ -22,7 +22,7 @@ def run_demo():
         # Get all employee emails
         employee_emails = agent.employee_df['email_id'].tolist()
         
-        print(f"\n📋 Testing {len(employee_emails)} employees...")
+        print(f"\n[INFO] Testing {len(employee_emails)} employees...")
         
         results = []
         
@@ -39,11 +39,11 @@ def run_demo():
             agent.display_result(result)
             
             if i < len(employee_emails):
-                input("\n⏸️  Press Enter to continue to next employee...")
+                input("\n[Press Enter to continue to next employee...]")
         
         # Summary
         print("\n" + "="*70)
-        print("📊 DEMO SUMMARY")
+        print("DEMO SUMMARY")
         print("="*70)
         print(f"Total Lookups: {len(results)}")
         print(f"Successful: {sum(1 for r in results if r.get('success'))}")
@@ -52,12 +52,12 @@ def run_demo():
         # Save all results
         with open('demo_results_all.json', 'w') as f:
             json.dump(results, f, indent=2)
-        print(f"\n💾 All results saved to: demo_results_all.json")
+        print(f"\n[INFO] All results saved to: demo_results_all.json")
         
-        print("\n✨ Demo completed successfully!")
+        print("\n[INFO] Demo completed successfully!")
         
     except Exception as e:
-        print(f"\n❌ Demo Error: {e}")
+        print(f"\n[ERROR] Demo Error: {e}")
         import traceback
         traceback.print_exc()
 

@@ -43,19 +43,19 @@ class EmployeeLookupAgent:
                 self.model = genai.GenerativeModel('gemini-pro')
             except:
                 self.model = None
-                print("⚠️  Note: Gemini model not available, using fallback responses")
+                print("[WARN] Gemini model not available, using fallback responses")
         
         # Load employee data (supports CSV and Excel)
         if data_path.endswith('.csv'):
             self.employee_df = pd.read_csv(data_path)
         else:
             self.employee_df = pd.read_excel(data_path)
-        print(f"✓ Loaded {len(self.employee_df)} employee records")
+        print(f"[INFO] Loaded {len(self.employee_df)} employee records")
         
         # Load policy data
         with open(policy_path, 'r') as f:
             self.policy_data = json.load(f)
-        print(f"✓ Loaded asset purchase policy")
+        print(f"[INFO] Loaded asset purchase policy")
         
     def find_employee(self, email: str) -> Optional[Dict]:
         """
@@ -167,7 +167,7 @@ For any questions, please contact your department manager.
         Returns:
             Dictionary with complete employee and eligibility information
         """
-        print(f"\n🔍 Looking up employee: {email}")
+        print(f"\n[INFO] Looking up employee: {email}")
         
         # Find employee
         employee = self.find_employee(email)
@@ -178,7 +178,7 @@ For any questions, please contact your department manager.
                 "employee_email": email
             }
         
-        print(f"✓ Found employee: {employee['name']}")
+        print(f"[INFO] Found employee: {employee['name']}")
         
         # Get purchase eligibility
         eligibility = self.get_purchase_eligibility(employee['employee_level'])
@@ -190,10 +190,10 @@ For any questions, please contact your department manager.
                 "employee_name": employee['name']
             }
         
-        print(f"✓ Retrieved purchase eligibility for level: {employee['employee_level']}")
+        print(f"[INFO] Retrieved purchase eligibility for level: {employee['employee_level']}")
         
         # Generate AI response
-        print(f"🤖 Generating intelligent response using Gemini...")
+        print(f"[INFO] Generating intelligent response using Gemini...")
         ai_summary = self.generate_intelligent_response(employee, eligibility)
         
         # Compile complete response
@@ -226,22 +226,22 @@ For any questions, please contact your department manager.
         print("="*70)
         
         if not result.get('success'):
-            print(f"\n❌ ERROR: {result.get('error')}")
+            print(f"\n[ERROR] {result.get('error')}")
             return
         
-        print(f"\n📧 Email: {result['employee_email']}")
-        print(f"👤 Name: {result['employee_name']}")
-        print(f"🆔 Employee ID: {result['employee_id']}")
-        print(f"💼 Designation: {result['designation']}")
-        print(f"📊 Level: {result['employee_level']}")
-        print(f"🏢 Department: {result['department']}")
-        print(f"\n💰 Purchase Limit: {result['currency']} ${result['purchase_limit']:,}")
-        print(f"\n✅ Approved Items:")
+        print(f"\nEmail: {result['employee_email']}")
+        print(f"Name: {result['employee_name']}")
+        print(f"Employee ID: {result['employee_id']}")
+        print(f"Designation: {result['designation']}")
+        print(f"Level: {result['employee_level']}")
+        print(f"Department: {result['department']}")
+        print(f"\nPurchase Limit: {result['currency']} ${result['purchase_limit']:,}")
+        print(f"\nApproved Items:")
         for item in result['approved_items']:
-            print(f"   • {item}")
+            print(f"   - {item}")
         
         if result.get('approval_required'):
-            print(f"\n⚠️  Approval Required: Yes")
+            print(f"\n[NOTE] Approval Required: Yes")
         
         print(f"\n{'='*70}")
         print("AI-GENERATED SUMMARY")
@@ -253,7 +253,7 @@ For any questions, please contact your department manager.
 def main():
     """Main execution function"""
     print("="*70)
-    print("🤖 EMPLOYEE LOOKUP AI AGENT (Powered by Google Gemini)")
+    print("EMPLOYEE LOOKUP AI AGENT (Powered by Google Gemini)")
     print("="*70)
     
     try:
@@ -265,7 +265,7 @@ def main():
         email = input("Enter employee email address: ").strip()
         
         if not email:
-            print("❌ Error: Email address is required")
+            print("[ERROR] Email address is required")
             return
         
         # Perform lookup
@@ -278,13 +278,13 @@ def main():
         output_file = f"lookup_result_{result.get('employee_id', 'unknown')}.json"
         with open(output_file, 'w') as f:
             json.dump(result, f, indent=2)
-        print(f"\n💾 Result saved to: {output_file}")
+        print(f"\n[INFO] Result saved to: {output_file}")
         
     except FileNotFoundError as e:
-        print(f"\n❌ Error: Required file not found - {e}")
-        print("Please ensure Employee_Data.xlsx and asset_purchase_policy.json exist")
+        print(f"\n[ERROR] Required file not found - {e}")
+        print("Please ensure Employee_Data.csv and asset_purchase_policy.json exist")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n[ERROR] {e}")
         import traceback
         traceback.print_exc()
 
