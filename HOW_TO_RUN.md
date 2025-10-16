@@ -40,6 +40,7 @@ Open in browser: **http://localhost:5174**
 2. Check if Python is installed: `python --version`
 3. Install dependencies: `pip install -r requirements.txt`
 4. Check if port 5000 is free
+5. Verify backend is running: Open http://localhost:5000 in browser (should show API info)
 
 ### Frontend not starting
 

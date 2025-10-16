@@ -59,7 +59,19 @@ def health():
         'agent_ready': agent is not None
     })
 
+@app.route('/')
+def home():
+    """Root endpoint"""
+    return jsonify({
+        'message': 'Employee Lookup Agent API',
+        'version': '1.0',
+        'endpoints': {
+            '/api/lookup': 'POST - Lookup employee by email',
+            '/api/health': 'GET - Health check'
+        }
+    })
+
 if __name__ == '__main__':
     print("Starting Employee Lookup Agent API on http://localhost:5000")
     print("Frontend should run on http://localhost:5173")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, host='0.0.0.0')
