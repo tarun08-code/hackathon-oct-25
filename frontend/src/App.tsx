@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { Send } from 'lucide-react'
+import logo from './assets/logo.png'
 
 interface Message {
   id: number
@@ -39,21 +41,22 @@ const styles = {
     overflow: 'hidden'
   },
   header: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(10px)',
-    borderBottom: '1px solid rgba(0,0,0,0.1)',
-    padding: '24px 32px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255,255,255,0.3)',
+    padding: '8px 40px',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
   },
   headerContent: {
-    maxWidth: '1200px',
+    maxWidth: '1400px',
     margin: '0 auto',
     display: 'flex',
     alignItems: 'center',
-    gap: '16px'
+    justifyContent: 'flex-start'
   },
   logo: {
-    fontSize: '28px',
+    fontSize: '120px',
     fontWeight: '700',
     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     WebkitBackgroundClip: 'text',
@@ -151,11 +154,10 @@ const styles = {
     animation: 'bounce 1.4s infinite ease-in-out both'
   },
   inputContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(10px)',
-    borderTop: '1px solid rgba(0,0,0,0.1)',
-    padding: '20px 24px',
-    boxShadow: '0 -2px 8px rgba(0,0,0,0.1)'
+    backgroundColor: 'transparent',
+    borderTop: 'none',
+    padding: '20px 24px 32px',
+    boxShadow: 'none'
   },
   inputForm: {
     display: 'flex',
@@ -164,32 +166,42 @@ const styles = {
   },
   input: {
     flex: 1,
-    padding: '14px 18px',
-    border: '2px solid #e0e0e0',
-    borderRadius: '24px',
+    padding: '16px 24px',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderRadius: '30px',
     fontSize: '15px',
     outline: 'none',
-    transition: 'all 0.2s',
-    backgroundColor: 'white'
+    transition: 'all 0.3s ease',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+    color: '#333'
   },
   inputFocus: {
-    borderColor: '#667eea'
+    borderColor: '#667eea',
+    boxShadow: '0 4px 24px rgba(102, 126, 234, 0.25)',
+    backgroundColor: 'white'
   },
   button: {
-    padding: '14px 32px',
+    padding: '16px 24px',
     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     color: 'white',
     border: 'none',
-    borderRadius: '24px',
+    borderRadius: '30px',
     fontSize: '15px',
     fontWeight: '600',
     cursor: 'pointer',
-    transition: 'all 0.2s',
-    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 20px rgba(102, 126, 234, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    minWidth: '120px',
+    justifyContent: 'center'
   },
   buttonHover: {
     transform: 'translateY(-2px)',
-    boxShadow: '0 6px 16px rgba(102, 126, 234, 0.5)'
+    boxShadow: '0 8px 28px rgba(102, 126, 234, 0.6)'
   },
   buttonDisabled: {
     backgroundColor: '#9ca3af',
@@ -197,27 +209,31 @@ const styles = {
   },
   suggestionsContainer: {
     display: 'flex',
-    gap: '8px',
+    gap: '10px',
     flexWrap: 'wrap' as const,
-    padding: '12px 0',
-    justifyContent: 'center'
+    padding: '16px 0 0',
+    justifyContent: 'center',
+    width: '100%'
   },
   suggestionChip: {
-    padding: '8px 16px',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    border: '1px solid #e0e0e0',
-    borderRadius: '20px',
+    padding: '10px 20px',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderRadius: '25px',
     fontSize: '13px',
     cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.3s ease',
     color: '#667eea',
-    fontWeight: '500'
+    fontWeight: '600',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
   },
   suggestionChipHover: {
     backgroundColor: '#667eea',
     color: 'white',
-    transform: 'translateY(-2px)',
-    boxShadow: '0 4px 8px rgba(102, 126, 234, 0.3)'
+    transform: 'translateY(-3px) scale(1.02)',
+    boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)',
+    borderColor: '#667eea'
   }
 }
 
@@ -227,7 +243,7 @@ function App() {
     {
       id: 1,
       type: 'bot',
-      content: '� Welcome to PaperShare Smart Assistant! To give you personalized help with employee lookup, budget checking, and equipment recommendations, please enter your employee email address to get started.',
+      content: '👋 Welcome to Elig AI! I am your intelligent assistant for employee eligibility and purchase recommendations. Please enter your employee email address to get started.',
       timestamp: new Date()
     }
   ])
@@ -389,18 +405,17 @@ ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
     <div style={styles.container}>
             <header style={styles.header}>
         <div style={styles.headerContent}>
-          <h1 style={styles.title}>PaperShare Smart Assistant</h1>
-          <p style={styles.subtitle}>
-            {isAuthenticated && userContext 
-              ? `Welcome ${userContext.name}! Budget: $${userContext.budget?.toLocaleString() || '0'}`
-              : 'Enter your employee email to get started'
-            }
-          </p>
-          {isAuthenticated && (
-            <div style={styles.userStatus}>
-              ✅ Authenticated • {userContext?.level} • {userContext?.department}
-            </div>
-          )}
+          <img 
+            src={logo} 
+            alt="Elig AI" 
+            style={{ 
+              height: '120px', 
+              width: 'auto', 
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 6px rgba(102, 126, 234, 0.2))',
+              margin: '-8px 0'
+            }} 
+          />
         </div>
       </header>
 
@@ -455,8 +470,25 @@ ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
               ...styles.button,
               ...(loading || !input.trim() ? styles.buttonDisabled : {})
             }}
+            onMouseEnter={(e) => {
+              if (!loading && input.trim()) {
+                Object.assign(e.currentTarget.style, styles.buttonHover)
+              }
+            }}
+            onMouseLeave={(e) => {
+              Object.assign(e.currentTarget.style, styles.button)
+            }}
           >
-            {loading ? 'Searching...' : 'Send'}
+            {loading ? (
+              <>
+                <span>Searching...</span>
+              </>
+            ) : (
+              <>
+                <span>Send</span>
+                <Send size={18} />
+              </>
+            )}
           </button>
         </form>
         
