@@ -25,7 +25,16 @@ employee_data = {
 # Create DataFrame
 df = pd.DataFrame(employee_data)
 
-# Save to Excel
-df.to_excel('Employee_Data.xlsx', index=False, sheet_name='Employees')
-print("Employee_Data.xlsx created successfully!")
+# Save to CSV (easier to open and edit)
+df.to_csv('Employee_Data.csv', index=False)
+print("✅ Employee_Data.csv created successfully!")
+
+# Also save to Excel if openpyxl is available
+try:
+    df.to_excel('Employee_Data.xlsx', index=False, sheet_name='Employees')
+    print("✅ Employee_Data.xlsx created successfully!")
+except ImportError:
+    print("⚠️  openpyxl not installed, skipping Excel file")
+
+print(f"\n📊 Created {len(df)} employee records:")
 print(df)

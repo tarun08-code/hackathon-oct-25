@@ -19,13 +19,13 @@ load_dotenv()
 class EmployeeLookupAgent:
     """AI Agent for employee lookup and purchase eligibility determination"""
     
-    def __init__(self, excel_path: str = "Employee_Data.xlsx", 
+    def __init__(self, data_path: str = "Employee_Data.csv", 
                  policy_path: str = "asset_purchase_policy.json"):
         """
         Initialize the Employee Lookup Agent
         
         Args:
-            excel_path: Path to employee data Excel file
+            data_path: Path to employee data file (CSV or Excel)
             policy_path: Path to asset purchase policy JSON file
         """
         # Configure Gemini API
@@ -45,8 +45,11 @@ class EmployeeLookupAgent:
                 self.model = None
                 print("⚠️  Note: Gemini model not available, using fallback responses")
         
-        # Load employee data
-        self.employee_df = pd.read_excel(excel_path)
+        # Load employee data (supports CSV and Excel)
+        if data_path.endswith('.csv'):
+            self.employee_df = pd.read_csv(data_path)
+        else:
+            self.employee_df = pd.read_excel(data_path)
         print(f"✓ Loaded {len(self.employee_df)} employee records")
         
         # Load policy data
