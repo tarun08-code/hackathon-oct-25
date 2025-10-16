@@ -35,7 +35,7 @@ class EmployeeLookupAgent:
                            "Please set it in .env file")
         
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
         
         # Load employee data
         self.employee_df = pd.read_excel(excel_path)
