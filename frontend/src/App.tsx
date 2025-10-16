@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface Message {
   id: number
@@ -17,6 +17,13 @@ interface EmployeeResult {
   department?: string
   designation?: string
   error?: string
+  session_id?: string
+  type?: string
+  user_context?: {
+    budget?: number
+    level?: string
+    department?: string
+  }
 }
 
 const styles = {

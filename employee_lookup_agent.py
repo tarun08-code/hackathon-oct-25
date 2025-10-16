@@ -343,42 +343,20 @@ Format your response with emojis and clear sections for better readability.
         # Get purchase eligibility
         eligibility = self.get_purchase_eligibility(employee['employee_level'])
         
-        # Generate personalized welcome message
-        if self.model:
-            try:
-                # Initialize smart search for user context
-                if not hasattr(self, 'smart_search'):
-                    from smart_search_mcp import SmartSearchMCP
-                    self.smart_search = SmartSearchMCP()
-                
-                # Get personalized asset suggestions
-                suggestions = self.smart_search.get_purchase_suggestions(email, "")
-                
-                welcome_prompt = f"""Generate a personalized welcome message for {employee['name']} who just logged into PaperShare.
+        # Simple eligibility message - just show the data
+        welcome_message = f"""✅ Authentication Successful
 
 Employee Details:
 - Name: {employee['name']}
-- Role: {employee['designation']}
+- Email: {email}
+- Employee ID: {employee['employee_id']}
+- Designation: {employee['designation']}
 - Level: {employee['employee_level']}
 - Department: {employee['department']}
+
+Purchase Eligibility:
 - Budget: ${eligibility['purchase_limit']:,}
-
-Make it:
-1. Warm and welcoming
-2. Mention their budget and what they can buy
-3. Offer to help with searches
-4. Include 2-3 relevant product suggestions
-5. Keep it under 120 words
-6. Use emojis appropriately
-
-Format with clear sections and be helpful like a personal assistant."""
-                
-                response = self.model.generate_content(welcome_prompt)
-                welcome_message = response.text
-            except:
-                welcome_message = f"Welcome {employee['name']}! I'm your PaperShare assistant. You have a ${eligibility['purchase_limit']:,} budget. How can I help you find the right equipment today?"
-        else:
-            welcome_message = f"Welcome {employee['name']}! You're authenticated. Budget: ${eligibility['purchase_limit']:,}"
+- Approved Items: {', '.join(eligibility['approved_items'])}"""
         
         # Log authentication
         session_manager.add_conversation_message(session_id, {
@@ -432,107 +410,76 @@ Format with clear sections and be helpful like a personal assistant."""
         return result
     
     def handle_natural_language_query_with_session(self, query: str, session_id: str) -> str:
-        """Handle natural language queries with session context and memory"""
-        if not self.model:
-            return "I'm sorry, natural language processing is not available right now."
+        """Handle natural language queries - USE AI FOR NATURAL CONVERSATION"""
         
-        # Get user context and conversation history
+        # Get user context
         user_context = session_manager.get_user_context(session_id)
-        conversation_history = session_manager.get_conversation_history(session_id, limit=5)
-        user_email = session_manager.get_user_email(session_id)
+        user_name = user_context.get('employee_data', {}).get('name', 'User')
+        budget = user_context.get('employee_data', {}).get('purchase_limit', 0)
+        level = user_context.get('employee_data', {}).get('employee_level', 'Unknown')
         
         # Initialize smart search
         if not hasattr(self, 'smart_search'):
             from smart_search_mcp import SmartSearchMCP
             self.smart_search = SmartSearchMCP()
         
-        # Analyze the query
-        search_analysis = self.smart_search.smart_query_understanding(query)
-        
-        # Perform searches based on intent
-        search_results = {}
-        if 'asset_search' in search_analysis['detected_types']:
-            search_results['assets'] = self.smart_search.search_assets(
-                query, 
-                user_context.get('employee_data', {}).get('employee_level'),
-                user_context.get('employee_data', {}).get('purchase_limit')
-            )[:5]
-        
-        # Get personalized suggestions if looking for products
-        personalized_suggestions = {}
-        if user_email and ('asset_search' in search_analysis['detected_types'] or 'recommendation' in search_analysis['detected_types']):
-            personalized_suggestions = self.smart_search.get_purchase_suggestions(user_email, query)
-        
-        # Create comprehensive prompt with memory
-        prompt = f"""You are {user_context.get('employee_data', {}).get('name', 'User')}'s personal PaperShare assistant. You have context and memory of our conversation.
-
-CURRENT USER: {user_context.get('employee_data', {}).get('name', 'User')} ({user_context.get('employee_data', {}).get('employee_level', 'Unknown')})
-BUDGET: ${user_context.get('employee_data', {}).get('purchase_limit', 0):,}
-DEPARTMENT: {user_context.get('employee_data', {}).get('department', 'Unknown')}
-
-CURRENT QUERY: "{query}"
-
-CONVERSATION CONTEXT:
-{chr(10).join([f"- {msg.get('type', 'unknown')}: {msg.get('content', '')[:50]}..." for msg in conversation_history[-3:]]) if conversation_history else "First conversation"}
-
-SEARCH ANALYSIS:
-- Intent: {', '.join(search_analysis['detected_types'])}
-- Entities Found: {json.dumps(search_analysis['entities'])}
-
-SEARCH RESULTS:
-{json.dumps(search_results, indent=2) if search_results else "No specific product searches"}
-
-PERSONALIZED SUGGESTIONS:
-{json.dumps(personalized_suggestions.get('matching_assets', [])[:3], indent=2) if personalized_suggestions.get('matching_assets') else "No personalized suggestions"}
-
-Please provide a helpful, personalized response that:
-
-1. **Shows you remember me** - Reference our conversation or my details
-2. **Answers the query** - Use search results and context
-3. **Includes product links** - When showing products, include clickable URLs
-4. **Stays within budget** - Remind me of budget constraints if relevant
-5. **Offers next steps** - Suggest related searches or actions
-6. **Be conversational** - Like a helpful personal assistant
-
-When mentioning products, format like:
-**Product Name** - $Price
-[View Product](URL) | Specs: details
-
-Keep response under 200 words and be helpful!"""
-        
+        # Try to search for products
+        search_results = []
         try:
-            response = self.model.generate_content(prompt)
-            
-            # Add search to history
-            if search_results:
-                session_manager.add_search_to_history(session_id, query, search_results)
-            
-            return response.text
-            
-        except Exception as e:
-            print(f"Gemini API error: {e}")
-            return self._generate_fallback_search_response_with_session(query, search_analysis, search_results, user_context)
-    
-    def _generate_fallback_search_response_with_session(self, query: str, search_analysis: Dict, search_results: Dict, user_context: Dict) -> str:
-        """Generate fallback response with session context when Gemini fails"""
-        user_name = user_context.get('employee_data', {}).get('name', 'there')
-        budget = user_context.get('employee_data', {}).get('purchase_limit', 0)
+            search_results = self.smart_search.search_assets(
+                query, 
+                level,
+                budget
+            )[:5]
+        except:
+            pass
         
-        response_parts = [f"Hi {user_name}! 🔍 Here's what I found for: {query}"]
+        # Use Gemini AI for natural conversation
+        if self.model:
+            try:
+                products_info = ""
+                if search_results:
+                    products_info = f"\n\nProducts found that match the query:\n" + "\n".join([f"- {r['asset']['name']}: ${r['asset']['price']:,}" for r in search_results[:5]])
+                
+                prompt = f"""You are a friendly and helpful chatbot assistant for PaperShare company's employee purchase system.
+You're powered by Google's Gemini AI model.
+
+Current User:
+- Name: {user_name}
+- Level: {level}
+- Budget: ${budget:,}
+
+User's Question: "{query}"
+{products_info}
+
+Your Role:
+- Chat naturally like a helpful friend
+- Answer ANY question the user asks (even casual conversation)
+- For product questions: show available products within their budget
+- For "what can you do": explain you help with employee purchase eligibility and products
+- For technical questions (models, AI, backend): say you're powered by Google Gemini AI
+- For greetings (hi, hello): greet them warmly
+- For unrelated topics: respond naturally but gently remind them you specialize in employee purchases
+- Keep responses conversational and under 100 words
+- Be warm, friendly, and helpful
+- NEVER say you're OpenAI - you are Google Gemini
+
+Respond like a friendly chatbot:"""
+                
+                response = self.model.generate_content(prompt)
+                return response.text
+            except Exception as e:
+                print(f"Gemini error: {e}")
         
-        if 'assets' in search_results and search_results['assets']:
-            response_parts.append(f"\n💻 **Products within your ${budget:,} budget:**")
-            for result in search_results['assets'][:3]:
+        # Fallback if AI fails
+        if search_results:
+            response = f"Here are products matching '{query}':\n\n"
+            for result in search_results:
                 asset = result['asset']
-                affordable = "✅" if result.get('affordable', True) else "⚠️"
-                response_parts.append(f"{affordable} **{asset['name']}** - ${asset['price']:,}")
-                if asset.get('url'):
-                    response_parts.append(f"[View Product]({asset['url']})")
+                response += f"• {asset['name']} - ${asset['price']:,}\n"
+            return response
         
-        if not search_results:
-            response_parts.append(f"\n💡 Try asking about: 'MacBook options', 'company cars', or 'tablets for presentations'")
-        
-        return '\n'.join(response_parts)
+        return "I can help you with employee purchase eligibility and eligible products. What would you like to know?"
     
     def lookup_employee(self, email: str) -> Dict:
         """
@@ -561,33 +508,10 @@ Keep response under 200 words and be helpful!"""
         # Find employee
         employee = self.find_employee(email)
         if not employee:
-            # Generate natural language response for not found
-            if self.model:
-                try:
-                    available_emails = self.employee_df['email_id'].tolist()
-                    prompt = f"""The user searched for employee email: {email}
-
-This email was not found in the PaperShare database.
-
-Available employees are:
-{', '.join(available_emails)}
-
-Generate a friendly, helpful response (under 80 words) that:
-1. Politely tells them the email wasn't found
-2. Suggests they check the spelling
-3. Offers to help with one of the available emails
-4. Be professional but warm"""
-                    
-                    response = self.model.generate_content(prompt)
-                    ai_message = response.text
-                except:
-                    ai_message = f"Employee with email '{email}' not found in database. Please check the email address and try again."
-            else:
-                ai_message = f"Employee with email '{email}' not found in database. Please check the email address and try again."
-            
+            # Simple not found message - NO AI
             return {
                 "success": False,
-                "error": ai_message,
+                "error": f"❌ Employee with email '{email}' not found in database.",
                 "employee_email": email,
                 "type": "not_found"
             }
@@ -606,9 +530,16 @@ Generate a friendly, helpful response (under 80 words) that:
         
         print(f"[INFO] Retrieved purchase eligibility for level: {employee['employee_level']}")
         
-        # Generate AI response
-        print(f"[INFO] Generating intelligent response using Gemini...")
-        ai_summary = self.generate_intelligent_response(employee, eligibility)
+        # Simple data summary - NO AI
+        ai_summary = f"""Employee: {employee['name']} ({email})
+Employee ID: {employee['employee_id']}
+Designation: {employee['designation']}
+Level: {employee['employee_level']}
+Department: {employee['department']}
+
+Purchase Eligibility:
+- Budget: ${eligibility['purchase_limit']:,}
+- Approved Items: {', '.join(eligibility['approved_items'])}"""
         
         # Compile complete response
         result = {

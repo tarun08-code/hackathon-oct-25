@@ -1,0 +1,34 @@
+{
+  "session_id": "43d880cf-848a-425f-8e32-ea14837d2e89",
+  "user_email": "rakesh.patel@abc-company.com",
+  "created_at": "2025-10-16T15:14:51.130561",
+  "last_activity": "2025-10-16T15:15:19.157618",
+  "conversation_history": [
+    {
+      "type": "user",
+      "content": "rakesh.patel@abc-company.com",
+      "timestamp": "2025-10-16T15:15:19.065791",
+      "id": 1
+    },
+    {
+      "type": "bot",
+      "content": "Hello Rakesh, welcome back to PaperShare! \ud83c\udf89 It's great to see you.\n\n**Your Budget & What You Can Explore:**\nWith your $3,000 budget, you're ready to acquire several premium financial reports and in-depth research papers. This allows you to access crucial market insights and analyses for your Associate Consultant role.\n\n**Need Assistance?**\nDon't hesitate to ask if you need help navigating or performing specific searches. I'm here to help! \ud83d\udd0d\n\n**Here are a few suggestions relevant to Finance:**\n*   \"Q3 Global Market Analysis Report\" \ud83d\udcca\n*   \"FinTech Innovation Trends 2024\" \ud83d\udca1\n*   \"Sustainable Investment Strategies Guide\" \ud83c\udf3f\n\nEnjoy your research and learning! Happy exploring!",
+      "timestamp": "2025-10-16T15:15:19.111129",
+      "id": 2
+    }
+  ],
+  "user_context": {
+    "authenticated": true,
+    "employee_data": {
+      "email_id": "rakesh.patel@abc-company.com",
+      "employee_id": "EMP005",
+      "name": "Rakesh Patel",
+      "designation": "Associate Consultant",
+      "employee_level": "IC",
+      "department": "Finance"
+    },
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}

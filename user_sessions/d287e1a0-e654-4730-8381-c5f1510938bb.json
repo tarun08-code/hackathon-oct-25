@@ -1,0 +1,46 @@
+{
+  "session_id": "d287e1a0-e654-4730-8381-c5f1510938bb",
+  "user_email": "rakesh.patel@abc-company.com",
+  "created_at": "2025-10-16T15:22:17.582950",
+  "last_activity": "2025-10-16T15:23:02.119046",
+  "conversation_history": [
+    {
+      "type": "user",
+      "content": "rakesh.patel@abc-company.com",
+      "timestamp": "2025-10-16T15:22:38.426136",
+      "id": 1
+    },
+    {
+      "type": "bot",
+      "content": "\u2705 Authentication Successful\n\nEmployee Details:\n- Name: Rakesh Patel\n- Email: rakesh.patel@abc-company.com\n- Employee ID: EMP005\n- Designation: Associate Consultant\n- Level: IC\n- Department: Finance\n\nPurchase Eligibility:\n- Budget: $3,000\n- Approved Items: Lenovo Laptop (standard specification as defined by IT department)",
+      "timestamp": "2025-10-16T15:22:38.470651",
+      "id": 2
+    },
+    {
+      "type": "user",
+      "content": "what can u do",
+      "timestamp": "2025-10-16T15:23:02.070740",
+      "id": 3
+    },
+    {
+      "type": "bot",
+      "content": "Hello Rakesh! Great to see you back. As your personal PaperShare assistant for the Finance department, I'm here to help you find and manage all the shared company documents and assets you need.\n\nHere's what I can do for you:\n\n*   **Search for documents:** Tell me what you're looking for \u2013 like \"Q3 financial reports,\" \"budget templates,\" or \"compliance guidelines.\"\n*   **Filter results:** I can narrow down searches by department (like Finance!), project, document type, or author.\n*   **Provide details and access:** Once we find a document, I'll give you quick summaries and direct links to view it.\n\nSince your current budget is $0, I'll always focus on helping you locate existing, approved documents and resources already available on PaperShare.\n\nTo get started, try asking me something like:\n*   \"Show me all shared finance documents.\"\n*   \"Find the latest expense policy.\"\n*   \"What budget templates are available?\"\n\nI'm ready when you are!",
+      "timestamp": "2025-10-16T15:23:02.095121",
+      "id": 4
+    }
+  ],
+  "user_context": {
+    "authenticated": true,
+    "employee_data": {
+      "email_id": "rakesh.patel@abc-company.com",
+      "employee_id": "EMP005",
+      "name": "Rakesh Patel",
+      "designation": "Associate Consultant",
+      "employee_level": "IC",
+      "department": "Finance"
+    },
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}

@@ -1,0 +1,46 @@
+{
+  "session_id": "35ca73b6-4feb-4053-8255-44ce05dfb799",
+  "user_email": "rakesh.patel@abc-company.com",
+  "created_at": "2025-10-16T15:27:30.638233",
+  "last_activity": "2025-10-16T15:27:55.647266",
+  "conversation_history": [
+    {
+      "type": "user",
+      "content": "rakesh.patel@abc-company.com",
+      "timestamp": "2025-10-16T15:27:41.213870",
+      "id": 1
+    },
+    {
+      "type": "bot",
+      "content": "\u2705 Authentication Successful\n\nEmployee Details:\n- Name: Rakesh Patel\n- Email: rakesh.patel@abc-company.com\n- Employee ID: EMP005\n- Designation: Associate Consultant\n- Level: IC\n- Department: Finance\n\nPurchase Eligibility:\n- Budget: $3,000\n- Approved Items: Lenovo Laptop (standard specification as defined by IT department)",
+      "timestamp": "2025-10-16T15:27:41.266465",
+      "id": 2
+    },
+    {
+      "type": "user",
+      "content": "so what can u do",
+      "timestamp": "2025-10-16T15:27:55.599753",
+      "id": 3
+    },
+    {
+      "type": "bot",
+      "content": "\ud83d\udd0d Search results for: so what can u do\n\nNo products found matching your search.",
+      "timestamp": "2025-10-16T15:27:55.624489",
+      "id": 4
+    }
+  ],
+  "user_context": {
+    "authenticated": true,
+    "employee_data": {
+      "email_id": "rakesh.patel@abc-company.com",
+      "employee_id": "EMP005",
+      "name": "Rakesh Patel",
+      "designation": "Associate Consultant",
+      "employee_level": "IC",
+      "department": "Finance"
+    },
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}
