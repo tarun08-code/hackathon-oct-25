@@ -1,5 +1,5 @@
 {
-  "policy_name": "ABC Company Asset Purchase Policy",
+  "policy_name": "PaperShare Asset Purchase Policy",
   "version": "1.0",
   "effective_date": "2025-01-01",
   "policy_rules": {
@@ -39,10 +39,10 @@
     }
   },
   "general_notes": [
-    "All purchases must comply with the Procurement Guidelines of ABC Company",
+    "All purchases must comply with the Procurement Guidelines of PaperShare",
     "All purchases require pre-approval via the internal Purchase Request System",
     "The company reserves the right to amend this policy at any time",
-    "Policy is applicable to all permanent employees of ABC Company",
+    "Policy is applicable to all permanent employees of PaperShare",
     "Purchase limits are per fiscal year"
   ]
 }

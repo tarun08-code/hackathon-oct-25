@@ -37,13 +37,16 @@ class EmployeeLookupAgent:
         genai.configure(api_key=api_key)
         # Try different model versions, fallback if not available
         try:
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            self.model = genai.GenerativeModel('gemini-2.5-flash')
         except:
             try:
-                self.model = genai.GenerativeModel('gemini-pro')
+                self.model = genai.GenerativeModel('gemini-flash-latest')
             except:
-                self.model = None
-                print("[WARN] Gemini model not available, using fallback responses")
+                try:
+                    self.model = genai.GenerativeModel('gemini-pro-latest')
+                except:
+                    self.model = None
+                    print("[WARN] Gemini model not available, using fallback responses")
         
         # Load employee data (supports CSV and Excel)
         if data_path.endswith('.csv'):
@@ -104,7 +107,7 @@ class EmployeeLookupAgent:
             AI-generated human-friendly response
         """
         prompt = f"""
-You are an AI assistant for ABC Company's employee purchase eligibility system.
+You are an AI assistant for PaperShare's employee purchase eligibility system.
 
 Employee Information:
 - Name: {employee_data['name']}
@@ -173,7 +176,7 @@ For any questions, please contact your department manager.
         # Get list of available employees for context
         employee_emails = self.employee_df['email_id'].tolist()
         
-        prompt = f"""You are an AI assistant for ABC Company's Employee Lookup Agent.
+        prompt = f"""You are an AI assistant for PaperShare's Employee Lookup Agent.
 
 User query: "{query}"
 
@@ -195,7 +198,7 @@ If they want to lookup an employee, tell them to enter one of the available emai
             response = self.model.generate_content(prompt)
             return response.text
         except Exception as e:
-            return f"I'm an employee lookup assistant. Please enter a valid employee email address from ABC Company (e.g., {employee_emails[0]}) to check their purchase eligibility."
+            return f"I'm an employee lookup assistant. Please enter a valid employee email address from PaperShare (e.g., {employee_emails[0]}) to check their purchase eligibility."
     
     def lookup_employee(self, email: str) -> Dict:
         """
@@ -229,7 +232,7 @@ If they want to lookup an employee, tell them to enter one of the available emai
                     available_emails = self.employee_df['email_id'].tolist()
                     prompt = f"""The user searched for employee email: {email}
 
-This email was not found in the ABC Company database.
+This email was not found in the PaperShare database.
 
 Available employees are:
 {', '.join(available_emails)}

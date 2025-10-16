@@ -22,30 +22,62 @@ interface EmployeeResult {
 const styles = {
   container: {
     height: '100vh',
+    width: '100vw',
     display: 'flex',
     flexDirection: 'column' as const,
-    backgroundColor: '#f5f5f5'
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    margin: 0,
+    padding: 0,
+    overflow: 'hidden'
   },
   header: {
-    backgroundColor: 'white',
-    borderBottom: '1px solid #e0e0e0',
-    padding: '20px 24px'
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(10px)',
+    borderBottom: '1px solid rgba(0,0,0,0.1)',
+    padding: '24px 32px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+  },
+  headerContent: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px'
+  },
+  logo: {
+    fontSize: '28px',
+    fontWeight: '700',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    margin: 0
+  },
+  titleContainer: {
+    flex: 1
   },
   title: {
-    fontSize: '24px',
+    fontSize: '20px',
     fontWeight: '600',
     color: '#333',
     margin: 0
   },
   subtitle: {
-    fontSize: '14px',
+    fontSize: '13px',
     color: '#666',
     marginTop: '4px'
+  },
+  link: {
+    fontSize: '13px',
+    color: '#667eea',
+    textDecoration: 'none',
+    fontWeight: '500'
   },
   messagesContainer: {
     flex: 1,
     overflowY: 'auto' as const,
-    padding: '20px 24px'
+    padding: '32px 24px',
+    width: '100%'
   },
   messageRow: {
     display: 'flex',
@@ -58,19 +90,21 @@ const styles = {
     justifyContent: 'flex-start'
   },
   messageBubbleUser: {
-    maxWidth: '600px',
-    padding: '12px 16px',
-    borderRadius: '12px',
-    backgroundColor: '#2563eb',
-    color: 'white'
+    maxWidth: '70%',
+    padding: '14px 18px',
+    borderRadius: '18px 18px 4px 18px',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
   },
   messageBubbleBot: {
-    maxWidth: '600px',
-    padding: '12px 16px',
-    borderRadius: '12px',
+    maxWidth: '70%',
+    padding: '14px 18px',
+    borderRadius: '18px 18px 18px 4px',
     backgroundColor: 'white',
-    border: '1px solid #e0e0e0',
-    color: '#333'
+    border: 'none',
+    color: '#333',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
   },
   messageText: {
     whiteSpace: 'pre-wrap' as const,
@@ -100,49 +134,106 @@ const styles = {
     animation: 'bounce 1.4s infinite ease-in-out both'
   },
   inputContainer: {
-    backgroundColor: 'white',
-    borderTop: '1px solid #e0e0e0',
-    padding: '16px 24px'
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(10px)',
+    borderTop: '1px solid rgba(0,0,0,0.1)',
+    padding: '20px 24px',
+    boxShadow: '0 -2px 8px rgba(0,0,0,0.1)'
   },
   inputForm: {
     display: 'flex',
-    gap: '12px'
+    gap: '12px',
+    width: '100%'
   },
   input: {
     flex: 1,
-    padding: '12px 16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '8px',
-    fontSize: '14px',
-    outline: 'none'
+    padding: '14px 18px',
+    border: '2px solid #e0e0e0',
+    borderRadius: '24px',
+    fontSize: '15px',
+    outline: 'none',
+    transition: 'all 0.2s',
+    backgroundColor: 'white'
+  },
+  inputFocus: {
+    borderColor: '#667eea'
   },
   button: {
-    padding: '12px 24px',
-    backgroundColor: '#2563eb',
+    padding: '14px 32px',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     color: 'white',
     border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '500',
-    cursor: 'pointer'
+    borderRadius: '24px',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+  },
+  buttonHover: {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 16px rgba(102, 126, 234, 0.5)'
   },
   buttonDisabled: {
     backgroundColor: '#9ca3af',
     cursor: 'not-allowed'
+  },
+  suggestionsContainer: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap' as const,
+    padding: '12px 0',
+    justifyContent: 'center'
+  },
+  suggestionChip: {
+    padding: '8px 16px',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    border: '1px solid #e0e0e0',
+    borderRadius: '20px',
+    fontSize: '13px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    color: '#667eea',
+    fontWeight: '500'
+  },
+  suggestionChipHover: {
+    backgroundColor: '#667eea',
+    color: 'white',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 8px rgba(102, 126, 234, 0.3)'
   }
 }
+
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
       type: 'bot',
-      content: 'Welcome to Employee Lookup Agent. Please enter an employee email address to get started.',
+      content: 'Welcome to PaperShare Employee Lookup Agent. Please enter an employee email address to get started, or try one of the suggestions below!',
       timestamp: new Date()
     }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  
+  // Pre-prepared suggestion questions
+  const suggestions = [
+    { label: 'What can you do?', query: 'what can you do?' },
+    { label: 'Show me an example', query: 'john.doe@abc-company.com' },
+    { label: 'Help me get started', query: 'help' },
+    { label: 'List all employees', query: 'show me all employees' }
+  ]
+
+  const handleSuggestionClick = (query: string) => {
+    if (loading) return
+    setInput(query)
+    // Auto-submit after setting input
+    setTimeout(() => {
+      const form = document.querySelector('form') as HTMLFormElement
+      if (form) form.requestSubmit()
+    }, 100)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -277,6 +368,27 @@ ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
             {loading ? 'Searching...' : 'Send'}
           </button>
         </form>
+        
+        {/* Suggestion Chips */}
+        {!loading && messages.length <= 3 && (
+          <div style={styles.suggestionsContainer}>
+            {suggestions.map((suggestion, index) => (
+              <button
+                key={index}
+                onClick={() => handleSuggestionClick(suggestion.query)}
+                style={styles.suggestionChip}
+                onMouseEnter={(e) => {
+                  Object.assign(e.currentTarget.style, styles.suggestionChipHover)
+                }}
+                onMouseLeave={(e) => {
+                  Object.assign(e.currentTarget.style, styles.suggestionChip)
+                }}
+              >
+                {suggestion.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
