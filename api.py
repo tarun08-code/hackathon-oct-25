@@ -21,7 +21,7 @@ except Exception as e:
 
 @app.route('/api/lookup', methods=['POST'])
 def lookup_employee():
-    """Lookup employee by email"""
+    """Lookup employee by email or handle natural language query"""
     try:
         if not agent:
             return jsonify({
@@ -30,25 +30,29 @@ def lookup_employee():
             }), 500
         
         data = request.json
-        email = data.get('email', '').strip()
+        query = data.get('email', '').strip()
         
-        if not email:
+        if not query:
             return jsonify({
                 'success': False,
-                'error': 'Email is required'
+                'error': 'Please enter an employee email address or ask me a question!'
             }), 400
         
-        # Perform lookup
-        result = agent.lookup_employee(email)
+        # Perform lookup (handles both email and natural language)
+        result = agent.lookup_employee(query)
+        
+        # Log the request
+        result_type = result.get('type', 'lookup')
+        print(f"[INFO] Query: {query} | Type: {result_type} | Success: {result.get('success')}")
         
         return jsonify(result)
     
     except Exception as e:
-        print(f"Error in lookup: {e}")
+        print(f"[ERROR] Error in lookup: {e}")
         traceback.print_exc()
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'An error occurred. Please try again.'
         }), 500
 
 @app.route('/api/health', methods=['GET'])

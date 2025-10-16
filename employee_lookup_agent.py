@@ -157,25 +157,101 @@ Approved Items:
 For any questions, please contact your department manager.
 """
     
+    def handle_natural_language_query(self, query: str) -> str:
+        """
+        Use Gemini to handle natural language queries and provide helpful responses
+        
+        Args:
+            query: User's natural language query
+            
+        Returns:
+            AI-generated helpful response
+        """
+        if not self.model:
+            return "I'm sorry, I can only process employee email addresses. Please provide a valid email address (e.g., john.doe@abc-company.com)"
+        
+        # Get list of available employees for context
+        employee_emails = self.employee_df['email_id'].tolist()
+        
+        prompt = f"""You are an AI assistant for ABC Company's Employee Lookup Agent.
+
+User query: "{query}"
+
+Available employees in the system:
+{', '.join(employee_emails)}
+
+The user seems to have entered something other than a valid email address. Please:
+
+1. If they're greeting you (hi, hello, etc.), greet them warmly and explain what you can do
+2. If they're asking a question, answer helpfully
+3. If they seem confused, guide them to enter an employee email address
+4. Be friendly, professional, and helpful
+5. Keep your response under 100 words
+
+If they want to lookup an employee, tell them to enter one of the available email addresses.
+"""
+        
+        try:
+            response = self.model.generate_content(prompt)
+            return response.text
+        except Exception as e:
+            return f"I'm an employee lookup assistant. Please enter a valid employee email address from ABC Company (e.g., {employee_emails[0]}) to check their purchase eligibility."
+    
     def lookup_employee(self, email: str) -> Dict:
         """
         Main method to lookup employee and return complete eligibility information
         
         Args:
-            email: Employee email address
+            email: Employee email address or natural language query
             
         Returns:
             Dictionary with complete employee and eligibility information
         """
-        print(f"\n[INFO] Looking up employee: {email}")
+        print(f"\n[INFO] Processing query: {email}")
+        
+        # Check if it looks like an email
+        if '@' not in email or '.' not in email:
+            # Handle as natural language query
+            ai_response = self.handle_natural_language_query(email)
+            return {
+                "success": False,
+                "query": email,
+                "ai_response": ai_response,
+                "type": "natural_language"
+            }
         
         # Find employee
         employee = self.find_employee(email)
         if not employee:
+            # Generate natural language response for not found
+            if self.model:
+                try:
+                    available_emails = self.employee_df['email_id'].tolist()
+                    prompt = f"""The user searched for employee email: {email}
+
+This email was not found in the ABC Company database.
+
+Available employees are:
+{', '.join(available_emails)}
+
+Generate a friendly, helpful response (under 80 words) that:
+1. Politely tells them the email wasn't found
+2. Suggests they check the spelling
+3. Offers to help with one of the available emails
+4. Be professional but warm"""
+                    
+                    response = self.model.generate_content(prompt)
+                    ai_message = response.text
+                except:
+                    ai_message = f"Employee with email '{email}' not found in database. Please check the email address and try again."
+            else:
+                ai_message = f"Employee with email '{email}' not found in database. Please check the email address and try again."
+            
             return {
                 "success": False,
-                "error": f"Employee with email '{email}' not found in database",
-                "employee_email": email
+                "error": ai_message,
+                "employee_email": email,
+                "type": "not_found"
             }
         
         print(f"[INFO] Found employee: {employee['name']}")

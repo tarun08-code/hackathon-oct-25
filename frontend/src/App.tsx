@@ -189,11 +189,18 @@ function App() {
     }
   }
 
-  const formatResponse = (data: EmployeeResult): string => {
+  const formatResponse = (data: any): string => {
+    // Handle natural language responses
+    if (data.type === 'natural_language' && data.ai_response) {
+      return data.ai_response
+    }
+    
+    // Handle not found with AI response
     if (!data.success) {
       return data.error || 'Employee not found'
     }
 
+    // Format successful employee lookup
     return `Employee Found:
 
 Name: ${data.employee_name}
@@ -205,7 +212,7 @@ Designation: ${data.designation}
 Purchase Limit: $${data.purchase_limit?.toLocaleString()}
 
 Approved Items:
-${data.approved_items?.map(item => `- ${item}`).join('\n')}`
+${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
   }
 
   return (
