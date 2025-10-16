@@ -2,3 +2,5 @@ google-generativeai
 pandas
 openpyxl
 python-dotenv
+flask
+flask-cors
