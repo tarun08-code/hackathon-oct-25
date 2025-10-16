@@ -35,7 +35,15 @@ class EmployeeLookupAgent:
                            "Please set it in .env file")
         
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # Try different model versions, fallback if not available
+        try:
+            self.model = genai.GenerativeModel('gemini-1.5-flash')
+        except:
+            try:
+                self.model = genai.GenerativeModel('gemini-pro')
+            except:
+                self.model = None
+                print("⚠️  Note: Gemini model not available, using fallback responses")
         
         # Load employee data
         self.employee_df = pd.read_excel(excel_path)
@@ -120,6 +128,8 @@ Keep it under 200 words.
 """
         
         try:
+            if self.model is None:
+                return self._generate_fallback_response(employee_data, eligibility_data)
             response = self.model.generate_content(prompt)
             return response.text
         except Exception as e:

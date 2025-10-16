@@ -1,0 +1,85 @@
+[
+  {
+    "success": true,
+    "employee_email": "john.doe@abc-company.com",
+    "employee_id": "EMP001",
+    "employee_name": "John Doe",
+    "designation": "Senior Consultant",
+    "employee_level": "Senior IC",
+    "department": "IT",
+    "purchase_limit": 10000,
+    "currency": "USD",
+    "approved_items": [
+      "Apple MacBook for development and engineering activities",
+      "Company Car (basis of business justification and department approval)"
+    ],
+    "approval_required": true,
+    "ai_summary": "\nHello John Doe,\n\nBased on your employee level (Senior IC), here is your purchase eligibility:\n\nPurchase Limit: $10,000\n\nApproved Items:\n\u2022 Apple MacBook for development and engineering activities\n\u2022 Company Car (basis of business justification and department approval)\n\nNote: Approval required from line manager\n\nFor any questions, please contact your department manager.\n"
+  },
+  {
+    "success": true,
+    "employee_email": "mary.smith@abc-company.com",
+    "employee_id": "EMP002",
+    "employee_name": "Mary Smith",
+    "designation": "Engineering Manager",
+    "employee_level": "Manager",
+    "department": "Engineering",
+    "purchase_limit": 10000,
+    "currency": "USD",
+    "approved_items": [
+      "Apple MacBook (any model approved by IT department)",
+      "Company Car (vehicle lease, insurance, regular servicing and maintenance)"
+    ],
+    "approval_required": false,
+    "ai_summary": "\nHello Mary Smith,\n\nBased on your employee level (Manager), here is your purchase eligibility:\n\nPurchase Limit: $10,000\n\nApproved Items:\n\u2022 Apple MacBook (any model approved by IT department)\n\u2022 Company Car (vehicle lease, insurance, regular servicing and maintenance)\n\nNo special approval required.\n\nFor any questions, please contact your department manager.\n"
+  },
+  {
+    "success": true,
+    "employee_email": "kevin.brown@abc-company.com",
+    "employee_id": "EMP003",
+    "employee_name": "Kevin Brown",
+    "designation": "Software Engineer",
+    "employee_level": "IC",
+    "department": "IT",
+    "purchase_limit": 3000,
+    "currency": "USD",
+    "approved_items": [
+      "Lenovo Laptop (standard specification as defined by IT department)"
+    ],
+    "approval_required": true,
+    "ai_summary": "\nHello Kevin Brown,\n\nBased on your employee level (IC), here is your purchase eligibility:\n\nPurchase Limit: $3,000\n\nApproved Items:\n\u2022 Lenovo Laptop (standard specification as defined by IT department)\n\nNote: Approval required from department head\n\nFor any questions, please contact your department manager.\n"
+  },
+  {
+    "success": true,
+    "employee_email": "amanda.tan@abc-company.com",
+    "employee_id": "EMP004",
+    "employee_name": "Amanda Tan",
+    "designation": "Lead Consultant",
+    "employee_level": "Senior IC",
+    "department": "Operations",
+    "purchase_limit": 10000,
+    "currency": "USD",
+    "approved_items": [
+      "Apple MacBook for development and engineering activities",
+      "Company Car (basis of business justification and department approval)"
+    ],
+    "approval_required": true,
+    "ai_summary": "\nHello Amanda Tan,\n\nBased on your employee level (Senior IC), here is your purchase eligibility:\n\nPurchase Limit: $10,000\n\nApproved Items:\n\u2022 Apple MacBook for development and engineering activities\n\u2022 Company Car (basis of business justification and department approval)\n\nNote: Approval required from line manager\n\nFor any questions, please contact your department manager.\n"
+  },
+  {
+    "success": true,
+    "employee_email": "rakesh.patel@abc-company.com",
+    "employee_id": "EMP005",
+    "employee_name": "Rakesh Patel",
+    "designation": "Associate Consultant",
+    "employee_level": "IC",
+    "department": "Finance",
+    "purchase_limit": 3000,
+    "currency": "USD",
+    "approved_items": [
+      "Lenovo Laptop (standard specification as defined by IT department)"
+    ],
+    "approval_required": true,
+    "ai_summary": "\nHello Rakesh Patel,\n\nBased on your employee level (IC), here is your purchase eligibility:\n\nPurchase Limit: $3,000\n\nApproved Items:\n\u2022 Lenovo Laptop (standard specification as defined by IT department)\n\nNote: Approval required from department head\n\nFor any questions, please contact your department manager.\n"
+  }
+]
