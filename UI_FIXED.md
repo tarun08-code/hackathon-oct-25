@@ -8,11 +8,13 @@
 ## What Was Fixed
 
 ### Problem 1: Tailwind CSS Not Working
+
 - **Issue**: Tailwind CSS v4 PostCSS plugin compatibility issues
 - **Solution**: Removed Tailwind, used inline CSS styles instead
 - **Result**: Clean, simple UI that works immediately
 
 ### Problem 2: Backend Connection Error
+
 - **Issue**: Backend was running but frontend couldn't connect
 - **Solution**: Backend is already running on port 5000, just needed frontend restart
 - **Result**: API calls now working properly
@@ -52,12 +54,14 @@
 ## Running the App
 
 ### If Backend Stops
+
 ```bash
 cd "/c/Users/Dineshtarun G/Desktop/ui path"
 python api.py
 ```
 
 ### If Frontend Stops
+
 ```bash
 cd "/c/Users/Dineshtarun G/Desktop/ui path/frontend"
 npm run dev
