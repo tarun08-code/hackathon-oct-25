@@ -63,9 +63,19 @@ const styles = {
     margin: 0
   },
   subtitle: {
-    fontSize: '13px',
-    color: '#666',
-    marginTop: '4px'
+    color: 'rgba(255, 255, 255, 0.9)',
+    margin: 0,
+    fontSize: '16px',
+    fontWeight: '400'
+  },
+  userStatus: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: '12px',
+    marginTop: '8px',
+    padding: '4px 12px',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    display: 'inline-block'
   },
   link: {
     fontSize: '13px',
@@ -210,19 +220,26 @@ function App() {
     {
       id: 1,
       type: 'bot',
-      content: 'Welcome to PaperShare Employee Lookup Agent. Please enter an employee email address to get started, or try one of the suggestions below!',
+      content: '� Welcome to PaperShare Smart Assistant! To give you personalized help with employee lookup, budget checking, and equipment recommendations, please enter your employee email address to get started.',
       timestamp: new Date()
     }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [sessionId, setSessionId] = useState<string>('')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [userContext, setUserContext] = useState<any>(null)
   
-  // Pre-prepared suggestion questions
+  // Pre-prepared suggestion questions with smart search
   const suggestions = [
-    { label: 'What can you do?', query: 'what can you do?' },
-    { label: 'Show me an example', query: 'john.doe@abc-company.com' },
-    { label: 'Help me get started', query: 'help' },
-    { label: 'List all employees', query: 'show me all employees' }
+    { label: '👋 What can you do?', query: 'what can you do?' },
+    { label: '💻 MacBook options for developers', query: 'show me MacBook options for software engineers' },
+    { label: '🚗 Company cars under $40k', query: 'company cars under 40000 budget' },
+    { label: '👨‍💼 John Doe eligibility', query: 'john.doe@abc-company.com' },
+    { label: '🏢 IT department employees', query: 'show me all IT department employees' },
+    { label: '💰 Senior IC budget limits', query: 'what is the budget limit for Senior IC employees' },
+    { label: '📱 Best tablets for presentations', query: 'tablets suitable for presentations and meetings' },
+    { label: '⚡ Engineering equipment', query: 'best equipment for engineering department' }
   ]
 
   const handleSuggestionClick = (query: string) => {
@@ -234,6 +251,26 @@ function App() {
       if (form) form.requestSubmit()
     }, 100)
   }
+
+  // Create session on component mount
+  useEffect(() => {
+    const initializeSession = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/session/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        const data = await response.json()
+        if (data.success) {
+          setSessionId(data.session_id)
+        }
+      } catch (error) {
+        console.error('Failed to create session:', error)
+      }
+    }
+    
+    initializeSession()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -254,10 +291,30 @@ function App() {
       const response = await fetch('http://localhost:5000/api/lookup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: input })
+        body: JSON.stringify({ 
+          email: input,
+          session_id: sessionId 
+        })
       })
 
       const data: EmployeeResult = await response.json()
+
+      // Update session ID if provided
+      if (data.session_id) {
+        setSessionId(data.session_id)
+      }
+
+      // Handle authentication success
+      if (data.type === 'authentication_success') {
+        setIsAuthenticated(true)
+        setUserContext({
+          name: data.employee_name,
+          email: data.employee_email,
+          budget: data.user_context?.budget,
+          level: data.user_context?.level,
+          department: data.user_context?.department
+        })
+      }
 
       const botMessage: Message = {
         id: messages.length + 2,
@@ -281,7 +338,17 @@ function App() {
   }
 
   const formatResponse = (data: any): string => {
-    // Handle natural language responses
+    // Handle authentication success
+    if (data.type === 'authentication_success' && data.welcome_message) {
+      return data.welcome_message
+    }
+    
+    // Handle authentication required
+    if (data.requires_auth && data.message) {
+      return data.message
+    }
+    
+    // Handle natural language responses with session context
     if (data.type === 'natural_language' && data.ai_response) {
       return data.ai_response
     }
@@ -291,7 +358,12 @@ function App() {
       return data.error || 'Employee not found'
     }
 
-    // Format successful employee lookup
+    // Handle successful employee lookup with AI summary (prioritize AI response)
+    if (data.success && data.ai_summary) {
+      return data.ai_summary
+    }
+
+    // Fallback format for successful employee lookup
     return `Employee Found:
 
 Name: ${data.employee_name}
@@ -308,9 +380,21 @@ ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
 
   return (
     <div style={styles.container}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>Employee Lookup Agent</h1>
-        <p style={styles.subtitle}>Enter employee email to check purchase eligibility</p>
+            <header style={styles.header}>
+        <div style={styles.headerContent}>
+          <h1 style={styles.title}>PaperShare Smart Assistant</h1>
+          <p style={styles.subtitle}>
+            {isAuthenticated && userContext 
+              ? `Welcome ${userContext.name}! Budget: $${userContext.budget?.toLocaleString() || '0'}`
+              : 'Enter your employee email to get started'
+            }
+          </p>
+          {isAuthenticated && (
+            <div style={styles.userStatus}>
+              ✅ Authenticated • {userContext?.level} • {userContext?.department}
+            </div>
+          )}
+        </div>
       </header>
 
       <div style={styles.messagesContainer}>
