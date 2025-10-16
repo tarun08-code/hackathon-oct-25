@@ -241,7 +241,7 @@ def require_authentication(session_id: str) -> Dict:
         return {
             'success': False,
             'requires_auth': True,
-            'message': '👋 Welcome to PaperShare! To give you personalized assistance, please enter your employee email address.',
+            'message': '👋 Welcome to Elig AI! To give you personalized assistance, please enter your employee email address.',
             'suggestions': [
                 'john.doe@abc-company.com',
                 'mary.smith@abc-company.com', 

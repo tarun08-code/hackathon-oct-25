@@ -8,7 +8,6 @@ from flask_cors import CORS
 from employee_lookup_agent import EmployeeLookupAgent
 from session_manager import session_manager, get_or_create_session
 import traceback
-import uuid
 
 app = Flask(__name__)
 CORS(app)

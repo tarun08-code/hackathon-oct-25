@@ -7,11 +7,11 @@ allowing Gemini to search through employees, assets, policies, and provide conte
 
 import json
 import re
-from typing import List, Dict, Any, Optional
-from fuzzywuzzy import fuzz, process
+from typing import List, Dict, Any
+from fuzzywuzzy import fuzz
 import pandas as pd
 from mcp.server import Server
-from mcp.types import Resource, Tool
+from mcp.types import Tool
 import asyncio
 
 class SmartSearchMCP:

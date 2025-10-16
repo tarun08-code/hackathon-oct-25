@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Send } from 'lucide-react'
+import { SendHorizontal, DollarSign, ShoppingCart, CheckCircle, HelpCircle } from 'lucide-react'
 import logo from './assets/logo.png'
 
 interface Message {
@@ -40,17 +40,31 @@ const styles = {
     padding: 0,
     overflow: 'hidden'
   },
+  centeredLogoContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '80px 0 60px',
+    animation: 'fadeIn 0.5s ease-in'
+  },
+  centeredLogo: {
+    height: '450px',
+    width: 'auto',
+    objectFit: 'contain' as const,
+    filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25))'
+  },
   header: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     backdropFilter: 'blur(20px)',
     WebkitBackdropFilter: 'blur(20px)',
     borderBottom: '1px solid rgba(255,255,255,0.3)',
-    padding: '8px 40px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
+    padding: '8px 24px',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
   headerContent: {
-    maxWidth: '1400px',
-    margin: '0 auto',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start'
@@ -113,9 +127,9 @@ const styles = {
     maxWidth: '70%',
     padding: '14px 18px',
     borderRadius: '18px 18px 4px 18px',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    color: 'white',
-    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+    backgroundColor: 'white',
+    color: '#333',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
   },
   messageBubbleBot: {
     maxWidth: '70%',
@@ -161,12 +175,12 @@ const styles = {
   },
   inputForm: {
     display: 'flex',
-    gap: '12px',
+    position: 'relative' as const,
     width: '100%'
   },
   input: {
     flex: 1,
-    padding: '16px 24px',
+    padding: '16px 60px 16px 24px',
     border: '2px solid rgba(255, 255, 255, 0.3)',
     borderRadius: '30px',
     fontSize: '15px',
@@ -182,51 +196,57 @@ const styles = {
     boxShadow: '0 4px 24px rgba(102, 126, 234, 0.25)',
     backgroundColor: 'white'
   },
-  button: {
-    padding: '16px 24px',
+  sendButton: {
+    position: 'absolute' as const,
+    right: '8px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    padding: '10px',
     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     color: 'white',
     border: 'none',
-    borderRadius: '30px',
-    fontSize: '15px',
-    fontWeight: '600',
+    borderRadius: '50%',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(102, 126, 234, 0.5)',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
-    minWidth: '120px',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: '40px',
+    height: '40px',
+    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.4)'
   },
-  buttonHover: {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 8px 28px rgba(102, 126, 234, 0.6)'
+  sendButtonHover: {
+    transform: 'translateY(-50%) scale(1.1)',
+    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.6)'
   },
-  buttonDisabled: {
-    backgroundColor: '#9ca3af',
-    cursor: 'not-allowed'
+  sendButtonDisabled: {
+    background: '#9ca3af',
+    cursor: 'not-allowed',
+    opacity: 0.5
   },
   suggestionsContainer: {
     display: 'flex',
     gap: '10px',
     flexWrap: 'wrap' as const,
     padding: '16px 0 0',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '100%'
   },
   suggestionChip: {
     padding: '10px 20px',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    border: '2px solid rgba(255, 255, 255, 0.3)',
-    borderRadius: '25px',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    border: '2px solid rgba(255, 255, 255, 0.8)',
+    borderRadius: '30px',
     fontSize: '13px',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     color: '#667eea',
     fontWeight: '600',
     backdropFilter: 'blur(10px)',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
   },
   suggestionChipHover: {
     backgroundColor: '#667eea',
@@ -239,30 +259,17 @@ const styles = {
 
 
 function App() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      type: 'bot',
-      content: '👋 Welcome to Elig AI! I am your intelligent assistant for employee eligibility and purchase recommendations. Please enter your employee email address to get started.',
-      timestamp: new Date()
-    }
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [sessionId, setSessionId] = useState<string>('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userContext, setUserContext] = useState<any>(null)
   
   // Pre-prepared suggestion questions with smart search
   const suggestions = [
-    { label: '👋 What can you do?', query: 'what can you do?' },
-    { label: '💻 MacBook options for developers', query: 'show me MacBook options for software engineers' },
-    { label: '🚗 Company cars under $40k', query: 'company cars under 40000 budget' },
-    { label: '👨‍💼 John Doe eligibility', query: 'john.doe@abc-company.com' },
-    { label: '🏢 IT department employees', query: 'show me all IT department employees' },
-    { label: '💰 Senior IC budget limits', query: 'what is the budget limit for Senior IC employees' },
-    { label: '📱 Best tablets for presentations', query: 'tablets suitable for presentations and meetings' },
-    { label: '⚡ Engineering equipment', query: 'best equipment for engineering department' }
+    { label: 'Purchase Limit', query: 'what is my purchase limit?', icon: DollarSign },
+    { label: 'Eligibility Assets', query: 'what assets am I eligible for?', icon: ShoppingCart },
+    { label: 'Approved', query: 'what items are approved for me?', icon: CheckCircle },
+    { label: 'What can you do?', query: 'what can you do?', icon: HelpCircle }
   ]
 
   const handleSuggestionClick = (query: string) => {
@@ -327,18 +334,6 @@ function App() {
         setSessionId(data.session_id)
       }
 
-      // Handle authentication success
-      if (data.type === 'authentication_success') {
-        setIsAuthenticated(true)
-        setUserContext({
-          name: data.employee_name,
-          email: data.employee_email,
-          budget: data.user_context?.budget,
-          level: data.user_context?.level,
-          department: data.user_context?.department
-        })
-      }
-
       const botMessage: Message = {
         id: messages.length + 2,
         type: 'bot',
@@ -401,23 +396,36 @@ Approved Items:
 ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
   }
 
+  // Check if user has sent at least one message (excluding the initial bot message)
+  const hasUserMessages = messages.some(msg => msg.type === 'user')
+
   return (
     <div style={styles.container}>
-            <header style={styles.header}>
-        <div style={styles.headerContent}>
+      {hasUserMessages ? (
+        <header style={styles.header}>
+          <div style={styles.headerContent}>
+            <img 
+              src={logo} 
+              alt="Elig AI" 
+              style={{ 
+                height: '120px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 2px 6px rgba(102, 126, 234, 0.2))',
+                margin: '-8px 0'
+              }} 
+            />
+          </div>
+        </header>
+      ) : (
+        <div style={styles.centeredLogoContainer}>
           <img 
             src={logo} 
             alt="Elig AI" 
-            style={{ 
-              height: '120px', 
-              width: 'auto', 
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 2px 6px rgba(102, 126, 234, 0.2))',
-              margin: '-8px 0'
-            }} 
+            style={styles.centeredLogo}
           />
         </div>
-      </header>
+      )}
 
       <div style={styles.messagesContainer}>
         {messages.map((message) => (
@@ -459,7 +467,7 @@ ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Enter employee email (e.g., john.doe@abc-company.com)"
+            placeholder="Ask Anything ..."
             style={styles.input}
             disabled={loading}
           />
@@ -467,49 +475,44 @@ ${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
             type="submit"
             disabled={loading || !input.trim()}
             style={{
-              ...styles.button,
-              ...(loading || !input.trim() ? styles.buttonDisabled : {})
+              ...styles.sendButton,
+              ...(loading || !input.trim() ? styles.sendButtonDisabled : {})
             }}
             onMouseEnter={(e) => {
               if (!loading && input.trim()) {
-                Object.assign(e.currentTarget.style, styles.buttonHover)
+                Object.assign(e.currentTarget.style, styles.sendButtonHover)
               }
             }}
             onMouseLeave={(e) => {
-              Object.assign(e.currentTarget.style, styles.button)
+              e.currentTarget.style.transform = 'translateY(-50%)'
             }}
           >
-            {loading ? (
-              <>
-                <span>Searching...</span>
-              </>
-            ) : (
-              <>
-                <span>Send</span>
-                <Send size={18} />
-              </>
-            )}
+            <SendHorizontal size={20} />
           </button>
         </form>
         
         {/* Suggestion Chips */}
-        {!loading && messages.length <= 3 && (
+        {!loading && (
           <div style={styles.suggestionsContainer}>
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                onClick={() => handleSuggestionClick(suggestion.query)}
-                style={styles.suggestionChip}
-                onMouseEnter={(e) => {
-                  Object.assign(e.currentTarget.style, styles.suggestionChipHover)
-                }}
-                onMouseLeave={(e) => {
-                  Object.assign(e.currentTarget.style, styles.suggestionChip)
-                }}
-              >
-                {suggestion.label}
-              </button>
-            ))}
+            {suggestions.map((suggestion, index) => {
+              const IconComponent = suggestion.icon
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleSuggestionClick(suggestion.query)}
+                  style={styles.suggestionChip}
+                  onMouseEnter={(e) => {
+                    Object.assign(e.currentTarget.style, styles.suggestionChipHover)
+                  }}
+                  onMouseLeave={(e) => {
+                    Object.assign(e.currentTarget.style, styles.suggestionChip)
+                  }}
+                >
+                  <IconComponent size={18} />
+                  <span>{suggestion.label}</span>
+                </button>
+              )
+            })}
           </div>
         )}
       </div>
