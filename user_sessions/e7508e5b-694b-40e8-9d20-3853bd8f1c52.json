@@ -1,0 +1,46 @@
+{
+  "session_id": "e7508e5b-694b-40e8-9d20-3853bd8f1c52",
+  "user_email": "sarah.lee@abc-company.com",
+  "created_at": "2025-10-16T16:56:17.120515",
+  "last_activity": "2025-10-16T16:56:47.169391",
+  "conversation_history": [
+    {
+      "type": "user",
+      "content": "sarah.lee@abc-company.com",
+      "timestamp": "2025-10-16T16:56:28.377437",
+      "id": 1
+    },
+    {
+      "type": "bot",
+      "content": "\u2705 Authentication Successful\n\nEmployee Details:\n- Name: Sarah Lee\n- Email: sarah.lee@abc-company.com\n- Employee ID: EMP006\n- Designation: Director\n- Level: Manager\n- Department: Sales\n\nPurchase Eligibility:\n- Budget: $10,000\n- Approved Items: Apple MacBook (any model approved by IT department), Company Car (vehicle lease, insurance, regular servicing and maintenance)",
+      "timestamp": "2025-10-16T16:56:28.406113",
+      "id": 2
+    },
+    {
+      "type": "user",
+      "content": "wt can u do",
+      "timestamp": "2025-10-16T16:56:47.089898",
+      "id": 3
+    },
+    {
+      "type": "bot",
+      "content": "Hi Sarah! I'm Elig AI, and I help with employee purchase eligibility and product recommendations. Think of me as your personal guide to finding awesome products you might be eligible for at PaperShare.\n\nHow can I help you explore your options today?",
+      "timestamp": "2025-10-16T16:56:47.130234",
+      "id": 4
+    }
+  ],
+  "user_context": {
+    "authenticated": true,
+    "employee_data": {
+      "email_id": "sarah.lee@abc-company.com",
+      "employee_id": "EMP006",
+      "name": "Sarah Lee",
+      "designation": "Director",
+      "employee_level": "Manager",
+      "department": "Sales"
+    },
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}

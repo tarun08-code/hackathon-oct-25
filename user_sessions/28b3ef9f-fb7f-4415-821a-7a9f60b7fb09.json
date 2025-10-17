@@ -1,0 +1,58 @@
+{
+  "session_id": "28b3ef9f-fb7f-4415-821a-7a9f60b7fb09",
+  "user_email": "sarah.lee@abc-company.com",
+  "created_at": "2025-10-16T17:00:12.645284",
+  "last_activity": "2025-10-16T17:01:13.172345",
+  "conversation_history": [
+    {
+      "type": "user",
+      "content": "sarah.lee@abc-company.com",
+      "timestamp": "2025-10-16T17:00:23.221586",
+      "id": 1
+    },
+    {
+      "type": "bot",
+      "content": "\u2705 Authentication Successful\n\nEmployee Details:\n- Name: Sarah Lee\n- Email: sarah.lee@abc-company.com\n- Employee ID: EMP006\n- Designation: Director\n- Level: Manager\n- Department: Sales\n\nPurchase Eligibility:\n- Budget: $10,000\n- Approved Items: Apple MacBook (any model approved by IT department), Company Car (vehicle lease, insurance, regular servicing and maintenance)",
+      "timestamp": "2025-10-16T17:00:23.264746",
+      "id": 2
+    },
+    {
+      "type": "user",
+      "content": "which llm is being used in the backedn",
+      "timestamp": "2025-10-16T17:00:47.145967",
+      "id": 3
+    },
+    {
+      "type": "bot",
+      "content": "Hi there!\n\nI'm Elig AI, and for technical questions like that, I can tell you that I'm powered by Google Gemini AI.\n\nHow can I help you with your employee purchase eligibility today, Sarah?",
+      "timestamp": "2025-10-16T17:00:47.216030",
+      "id": 4
+    },
+    {
+      "type": "user",
+      "content": "what assets am I eligible for?",
+      "timestamp": "2025-10-16T17:01:13.116141",
+      "id": 5
+    },
+    {
+      "type": "bot",
+      "content": "Hi Sarah! I'm Elig AI, your employee eligibility assistant. I can definitely help you check what assets you're eligible for!\n\nLooking at your profile, your current budget for asset purchases is $0. This means there aren't any assets you can claim or purchase at this moment.\n\nIf you believe you should have a budget or need to request one, I recommend reaching out to HR or checking the internal company policies for asset allocation! Let me know if you have any other questions.",
+      "timestamp": "2025-10-16T17:01:13.145926",
+      "id": 6
+    }
+  ],
+  "user_context": {
+    "authenticated": true,
+    "employee_data": {
+      "email_id": "sarah.lee@abc-company.com",
+      "employee_id": "EMP006",
+      "name": "Sarah Lee",
+      "designation": "Director",
+      "employee_level": "Manager",
+      "department": "Sales"
+    },
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}
