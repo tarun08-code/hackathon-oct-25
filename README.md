@@ -1,145 +1,116 @@
-# 🤖 Employee Lookup AI Agent (Google Gemini)
+# Employee Lookup AI Agent
 
-A hackathon-winning AI-powered agent that automates employee purchase eligibility validation using **Google Gemini API**.
+An AI-powered agent that automates employee purchase eligibility validation using Google Gemini API.
 
-## 📋 Overview
+## Overview
 
-This project automates ABC Company's employee purchase eligibility validation process. Instead of manually checking employee profiles and company policies, this intelligent agent:
+This project automates ABC Company's employee purchase eligibility validation process. The agent:
 
-1. ✅ Takes employee email as input
-2. ✅ Retrieves employee data from Excel database
-3. ✅ Determines purchase eligibility from policy rules
-4. ✅ Uses Google Gemini AI to generate intelligent, context-aware responses
-5. ✅ Returns structured JSON output with employee details and purchase limits
+1. Takes employee email as input
+2. Retrieves employee data from CSV database
+3. Determines purchase eligibility from policy rules
+4. Uses Google Gemini AI to generate intelligent responses
+5. Returns structured JSON output with employee details and purchase limits
 
-## 🎯 Features
+## Features
 
-- **AI-Powered Responses**: Uses Google Gemini to generate intelligent, human-friendly summaries
-- **Structured Data Processing**: Reads from Excel and JSON for easy data management
-- **Complete Employee Lookup**: Retrieves all employee details in one query
-- **Policy-Based Eligibility**: Automatically determines purchase limits and approved items
-- **JSON Output**: Saves results in structured format for integration
-- **User-Friendly CLI**: Simple command-line interface
+- AI-Powered Responses using Google Gemini
+- Structured Data Processing (CSV and JSON)
+- Complete Employee Lookup
+- Policy-Based Eligibility Determination
+- JSON Output for Integration
+- Simple Command-Line Interface
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-ui path/
 ├── employee_lookup_agent.py      # Main AI agent script
-├── Employee_Data.xlsx             # Employee database
+├── Employee_Data.csv              # Employee database
 ├── asset_purchase_policy.json    # Purchase policy rules
-├── create_employee_data.py       # Script to generate Excel file
+├── create_employee_data.py       # Script to generate data file
+├── demo.py                        # Demo script
+├── test_agent.py                  # Test script
 ├── requirements.txt               # Python dependencies
-├── .env                          # API keys (create this)
-├── .env.example                  # Template for .env file
-└── README.md                     # This file
+├── .env                          # API keys
+└── README.md                     # Documentation
 ```
 
-## 🚀 Quick Start
+## Installation
 
 ### Prerequisites
 
 - Python 3.8 or higher
-- Google Gemini API Key ([Get it here](https://makersuite.google.com/app/apikey))
+- Google Gemini API Key
 
-### Installation
+### Setup
 
-1. **Clone or download this project**
-
-2. **Install dependencies**
+1. Install dependencies
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Generate Employee Data Excel file**
+2. Set up your Gemini API Key
 
-   ```bash
-   python create_employee_data.py
-   ```
-
-4. **Set up your Gemini API Key**
-
-   Create a `.env` file in the project root:
+   Create a `.env` file:
 
    ```bash
    GEMINI_API_KEY=your_api_key_here
    ```
 
-   Or use the example file:
+3. Generate employee data (if needed)
 
    ```bash
-   cp .env.example .env
-   # Then edit .env and add your API key
+   python create_employee_data.py
    ```
 
-### Running the Agent
+## Usage
+
+### Run the Agent
 
 ```bash
 python employee_lookup_agent.py
 ```
 
-Then enter an employee email when prompted, for example:
+Enter an employee email when prompted:
 
-- `john.doe@abc-company.com`
-- `mary.smith@abc-company.com`
+- john.doe@abc-company.com
+- mary.smith@abc-company.com
+- kevin.brown@abc-company.com
 
-## 💡 Example Usage
+### Run Demo
 
-### Input
+Test all employees automatically:
 
+```bash
+python demo.py
 ```
-Enter employee email address: john.doe@abc-company.com
-```
 
-### Output
+## Example Output
 
 ```
 ======================================================================
 EMPLOYEE PURCHASE ELIGIBILITY REPORT
 ======================================================================
 
-📧 Email: john.doe@abc-company.com
-👤 Name: John Doe
-🆔 Employee ID: EMP001
-💼 Designation: Senior Consultant
-📊 Level: Senior IC
-🏢 Department: IT
+Email: john.doe@abc-company.com
+Name: John Doe
+Employee ID: EMP001
+Designation: Senior Consultant
+Level: Senior IC
+Department: IT
 
-💰 Purchase Limit: USD $10,000
+Purchase Limit: USD $10,000
 
-✅ Approved Items:
-   • MacBook Pro
-   • Multiple monitors
-   • Premium peripherals
-   • Company car & associated expenses
-   • Professional development tools
+Approved Items:
+   - Apple MacBook for development and engineering activities
+   - Company Car (with business justification and approval)
 
-======================================================================
-AI-GENERATED SUMMARY
-======================================================================
-Hello John Doe,
-
-As a Senior Individual Contributor at ABC Company, you have enhanced
-purchase benefits. Your purchase limit is $10,000, giving you access to
-premium equipment and resources.
-
-You can purchase high-quality items including a MacBook Pro, multiple
-monitors, premium peripherals, and even access company car benefits with
-associated expenses. Additionally, you're eligible for professional
-development tools to further your career growth.
-
-No special approval is required for purchases within your limit. Simply
-ensure all purchases are work-related and keep receipts for reimbursement.
-
-If you have any questions about specific purchases, feel free to reach
-out to your department manager.
+[NOTE] Approval Required: Yes
 ======================================================================
 ```
 
-### JSON Output
-
-The result is also saved as `lookup_result_EMP001.json`:
+## JSON Output Format
 
 ```json
 {
@@ -153,120 +124,82 @@ The result is also saved as `lookup_result_EMP001.json`:
   "purchase_limit": 10000,
   "currency": "USD",
   "approved_items": [
-    "MacBook Pro",
-    "Multiple monitors",
-    "Premium peripherals",
-    "Company car & associated expenses",
-    "Professional development tools"
+    "Apple MacBook for development and engineering activities",
+    "Company Car (with business justification and approval)"
   ],
-  "approval_required": false,
-  "ai_summary": "..."
+  "approval_required": true
 }
 ```
 
-## 📊 Employee Levels & Purchase Limits
+## Employee Levels
 
-| Level                       | Purchase Limit | Key Benefits                                       |
-| --------------------------- | -------------- | -------------------------------------------------- |
-| IC (Individual Contributor) | $3,000         | Standard laptop, monitor, peripherals              |
-| Senior IC                   | $10,000        | MacBook Pro, multiple monitors, company car        |
-| Manager                     | $25,000        | All Senior IC benefits + team budget + conferences |
+| Level     | Purchase Limit | Approved Items                             |
+| --------- | -------------- | ------------------------------------------ |
+| IC        | $3,000         | Lenovo Laptop (standard spec)              |
+| Senior IC | $10,000        | Apple MacBook, Company Car (with approval) |
+| Manager   | $10,000        | Apple MacBook, Company Car                 |
 
-## 🎓 Sample Employee Data
+## Sample Employees
 
-The project includes 5 sample employees:
+1. john.doe@abc-company.com - Senior IC, IT
+2. mary.smith@abc-company.com - Manager, Engineering
+3. kevin.brown@abc-company.com - IC, IT
+4. amanda.tan@abc-company.com - Senior IC, Operations
+5. rakesh.patel@abc-company.com - IC, Finance
 
-1. **John Doe** (john.doe@abc-company.com) - Senior IC, IT
-2. **Mary Smith** (mary.smith@abc-company.com) - Manager, Engineering
-3. **Kevin Brown** (kevin.brown@abc-company.com) - IC, IT
-4. **Amanda Tan** (amanda.tan@abc-company.com) - Senior IC, Operations
-5. **Rakesh Patel** (rakesh.patel@abc-company.com) - IC, Finance
+## Customization
 
-## 🔧 Customization
+### Add New Employees
 
-### Adding New Employees
+Edit `Employee_Data.csv`:
 
-Edit `Employee_Data.xlsx` or modify `create_employee_data.py` and regenerate:
-
-```python
-employee_data = {
-    'email_id': ['new.employee@abc-company.com'],
-    'employee_id': ['EMP006'],
-    'name': ['New Employee'],
-    'designation': ['Software Engineer'],
-    'employee_level': ['IC'],
-    'department': ['Engineering']
-}
+```csv
+email_id,employee_id,name,designation,employee_level,department
+new.employee@abc-company.com,EMP006,New Employee,Developer,IC,Engineering
 ```
 
-### Modifying Purchase Policy
+### Modify Purchase Policy
 
-Edit `asset_purchase_policy.json` to change limits or approved items:
+Edit `asset_purchase_policy.json`:
 
 ```json
 {
-  "IC": {
-    "purchase_limit": 5000,
-    "approved_items": ["Laptop", "Monitor", "..."]
+  "policy_rules": {
+    "IC": {
+      "purchase_limit": 5000,
+      "approved_items": ["Laptop", "Monitor"]
+    }
   }
 }
 ```
 
-## 🤝 Why This Wins Hackathons
+## Troubleshooting
 
-✨ **AI Integration**: Uses Google Gemini for intelligent responses
-✨ **Complete Solution**: End-to-end working prototype
-✨ **Real-World Problem**: Solves actual business automation need
-✨ **Clean Code**: Well-structured, documented, and maintainable
-✨ **Easy Demo**: Simple CLI interface for quick demonstrations
-✨ **Extensible**: Easy to add web UI, database, or API layer
-✨ **Professional Output**: Both JSON and human-readable formats
+**GEMINI_API_KEY not found**
 
-## 🚀 Future Enhancements
+- Create `.env` file with your API key
 
-- [ ] Web interface using Flask/Streamlit
-- [ ] Database integration (PostgreSQL/MongoDB)
-- [ ] REST API for system integration
-- [ ] Email notifications
-- [ ] Approval workflow automation
-- [ ] Multi-language support
-- [ ] Voice input using Gemini multimodal
-- [ ] PDF report generation
+**Employee not found**
 
-## 📝 License
+- Check email spelling
+- Verify email exists in Employee_Data.csv
 
-This is a hackathon project for educational purposes.
+**Import errors**
 
-## 👥 Team
+- Run `pip install -r requirements.txt`
 
-Built by beginners aiming to win the hackathon! 🏆
+**CSV file not found**
 
-## 🆘 Troubleshooting
+- Run `python create_employee_data.py`
 
-### "GEMINI_API_KEY not found"
+## Technical Stack
 
-Make sure you created a `.env` file with your API key.
+- Python 3
+- Google Gemini AI (gemini-1.5-flash)
+- pandas
+- google-generativeai
+- python-dotenv
 
-### "Employee not found"
+## License
 
-Check the email address spelling and ensure it exists in `Employee_Data.xlsx`.
-
-### Import errors
-
-Run: `pip install -r requirements.txt`
-
-### Excel file not found
-
-Run: `python create_employee_data.py` to generate the employee database.
-
-## 📞 Support
-
-For questions or issues, please check:
-
-- Google Gemini API docs: https://ai.google.dev/docs
-- Pandas documentation: https://pandas.pydata.org/docs/
-
----
-
-**Happy Hacking! 🎉**
-# hackathon-oct-25
+Educational/Hackathon Project

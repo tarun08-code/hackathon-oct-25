@@ -1,0 +1,523 @@
+import { useState, useEffect } from 'react'
+import { SendHorizontal, DollarSign, ShoppingCart, CheckCircle, HelpCircle } from 'lucide-react'
+import logo from './assets/logo.png'
+
+interface Message {
+  id: number
+  type: 'user' | 'bot'
+  content: string
+  timestamp: Date
+}
+
+interface EmployeeResult {
+  success: boolean
+  employee_email?: string
+  employee_name?: string
+  employee_level?: string
+  purchase_limit?: number
+  approved_items?: string[]
+  department?: string
+  designation?: string
+  error?: string
+  session_id?: string
+  type?: string
+  user_context?: {
+    budget?: number
+    level?: string
+    department?: string
+  }
+}
+
+const styles = {
+  container: {
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    margin: 0,
+    padding: 0,
+    overflow: 'hidden'
+  },
+  centeredLogoContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '80px 0 60px',
+    animation: 'fadeIn 0.5s ease-in'
+  },
+  centeredLogo: {
+    height: '450px',
+    width: 'auto',
+    objectFit: 'contain' as const,
+    filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25))'
+  },
+  header: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255,255,255,0.3)',
+    padding: '8px 24px',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  headerContent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  logo: {
+    fontSize: '120px',
+    fontWeight: '700',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    margin: 0
+  },
+  titleContainer: {
+    flex: 1
+  },
+  title: {
+    fontSize: '20px',
+    fontWeight: '600',
+    color: '#333',
+    margin: 0
+  },
+  subtitle: {
+    color: 'rgba(255, 255, 255, 0.9)',
+    margin: 0,
+    fontSize: '16px',
+    fontWeight: '400'
+  },
+  userStatus: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: '12px',
+    marginTop: '8px',
+    padding: '4px 12px',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    display: 'inline-block'
+  },
+  link: {
+    fontSize: '13px',
+    color: '#667eea',
+    textDecoration: 'none',
+    fontWeight: '500'
+  },
+  messagesContainer: {
+    flex: 1,
+    overflowY: 'auto' as const,
+    padding: '32px 24px',
+    width: '100%'
+  },
+  messageRow: {
+    display: 'flex',
+    marginBottom: '16px'
+  },
+  messageRowUser: {
+    justifyContent: 'flex-end'
+  },
+  messageRowBot: {
+    justifyContent: 'flex-start'
+  },
+  messageBubbleUser: {
+    maxWidth: '70%',
+    padding: '14px 18px',
+    borderRadius: '18px 18px 4px 18px',
+    backgroundColor: 'white',
+    color: '#333',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+  },
+  messageBubbleBot: {
+    maxWidth: '70%',
+    padding: '14px 18px',
+    borderRadius: '18px 18px 18px 4px',
+    backgroundColor: 'white',
+    border: 'none',
+    color: '#333',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+  },
+  messageText: {
+    whiteSpace: 'pre-wrap' as const,
+    margin: 0,
+    lineHeight: '1.5'
+  },
+  timestamp: {
+    fontSize: '11px',
+    marginTop: '8px',
+    display: 'block'
+  },
+  timestampUser: {
+    color: '#bfdbfe'
+  },
+  timestampBot: {
+    color: '#999'
+  },
+  loadingDots: {
+    display: 'flex',
+    gap: '6px'
+  },
+  dot: {
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    backgroundColor: '#999',
+    animation: 'bounce 1.4s infinite ease-in-out both'
+  },
+  inputContainer: {
+    backgroundColor: 'transparent',
+    borderTop: 'none',
+    padding: '20px 24px 32px',
+    boxShadow: 'none'
+  },
+  inputForm: {
+    display: 'flex',
+    position: 'relative' as const,
+    width: '100%'
+  },
+  input: {
+    flex: 1,
+    padding: '16px 60px 16px 24px',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderRadius: '30px',
+    fontSize: '15px',
+    outline: 'none',
+    transition: 'all 0.3s ease',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+    color: '#333'
+  },
+  inputFocus: {
+    borderColor: '#667eea',
+    boxShadow: '0 4px 24px rgba(102, 126, 234, 0.25)',
+    backgroundColor: 'white'
+  },
+  sendButton: {
+    position: 'absolute' as const,
+    right: '8px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    padding: '10px',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '50%',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '40px',
+    height: '40px',
+    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.4)'
+  },
+  sendButtonHover: {
+    transform: 'translateY(-50%) scale(1.1)',
+    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.6)'
+  },
+  sendButtonDisabled: {
+    background: '#9ca3af',
+    cursor: 'not-allowed',
+    opacity: 0.5
+  },
+  suggestionsContainer: {
+    display: 'flex',
+    gap: '10px',
+    flexWrap: 'wrap' as const,
+    padding: '16px 0 0',
+    justifyContent: 'flex-start',
+    width: '100%'
+  },
+  suggestionChip: {
+    padding: '10px 20px',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    border: '2px solid rgba(255, 255, 255, 0.8)',
+    borderRadius: '30px',
+    fontSize: '13px',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    color: '#667eea',
+    fontWeight: '600',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  },
+  suggestionChipHover: {
+    backgroundColor: '#667eea',
+    color: 'white',
+    transform: 'translateY(-3px) scale(1.02)',
+    boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)',
+    borderColor: '#667eea'
+  }
+}
+
+
+function App() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [sessionId, setSessionId] = useState<string>('')
+  
+  // Pre-prepared suggestion questions with smart search
+  const suggestions = [
+    { label: 'Purchase Limit', query: 'what is my purchase limit?', icon: DollarSign },
+    { label: 'Eligibility Assets', query: 'what assets am I eligible for?', icon: ShoppingCart },
+    { label: 'Approved', query: 'what items are approved for me?', icon: CheckCircle },
+    { label: 'What can you do?', query: 'what can you do?', icon: HelpCircle }
+  ]
+
+  const handleSuggestionClick = (query: string) => {
+    if (loading) return
+    setInput(query)
+    // Auto-submit after setting input
+    setTimeout(() => {
+      const form = document.querySelector('form') as HTMLFormElement
+      if (form) form.requestSubmit()
+    }, 100)
+  }
+
+  // Create session on component mount
+  useEffect(() => {
+    const initializeSession = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/session/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        const data = await response.json()
+        if (data.success) {
+          setSessionId(data.session_id)
+        }
+      } catch (error) {
+        console.error('Failed to create session:', error)
+      }
+    }
+    
+    initializeSession()
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!input.trim() || loading) return
+
+    const userMessage: Message = {
+      id: messages.length + 1,
+      type: 'user',
+      content: input,
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setLoading(true)
+
+    try {
+      const response = await fetch('http://localhost:5000/api/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: input,
+          session_id: sessionId 
+        })
+      })
+
+      const data: EmployeeResult = await response.json()
+
+      // Update session ID if provided
+      if (data.session_id) {
+        setSessionId(data.session_id)
+      }
+
+      const botMessage: Message = {
+        id: messages.length + 2,
+        type: 'bot',
+        content: formatResponse(data),
+        timestamp: new Date()
+      }
+
+      setMessages(prev => [...prev, botMessage])
+    } catch (error) {
+      const errorMessage: Message = {
+        id: messages.length + 2,
+        type: 'bot',
+        content: 'Error: Could not connect to the server. Please make sure the backend is running on http://localhost:5000',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatResponse = (data: any): string => {
+    // Handle authentication success
+    if (data.type === 'authentication_success' && data.welcome_message) {
+      return data.welcome_message
+    }
+    
+    // Handle authentication required
+    if (data.requires_auth && data.message) {
+      return data.message
+    }
+    
+    // Handle natural language responses with session context
+    if (data.type === 'natural_language' && data.ai_response) {
+      return data.ai_response
+    }
+    
+    // Handle not found with AI response
+    if (!data.success) {
+      return data.error || 'Employee not found'
+    }
+
+    // Handle successful employee lookup with AI summary (prioritize AI response)
+    if (data.success && data.ai_summary) {
+      return data.ai_summary
+    }
+
+    // Fallback format for successful employee lookup
+    return `Employee Found:
+
+Name: ${data.employee_name}
+Email: ${data.employee_email}
+Level: ${data.employee_level}
+Department: ${data.department}
+Designation: ${data.designation}
+
+Purchase Limit: $${data.purchase_limit?.toLocaleString()}
+
+Approved Items:
+${data.approved_items?.map((item: string) => `- ${item}`).join('\n')}`
+  }
+
+  // Check if user has sent at least one message (excluding the initial bot message)
+  const hasUserMessages = messages.some(msg => msg.type === 'user')
+
+  return (
+    <div style={styles.container}>
+      {hasUserMessages ? (
+        <header style={styles.header}>
+          <div style={styles.headerContent}>
+            <img 
+              src={logo} 
+              alt="Elig AI" 
+              style={{ 
+                height: '120px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 2px 6px rgba(102, 126, 234, 0.2))',
+                margin: '-8px 0'
+              }} 
+            />
+          </div>
+        </header>
+      ) : (
+        <div style={styles.centeredLogoContainer}>
+          <img 
+            src={logo} 
+            alt="Elig AI" 
+            style={styles.centeredLogo}
+          />
+        </div>
+      )}
+
+      <div style={styles.messagesContainer}>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            style={{
+              ...styles.messageRow,
+              ...(message.type === 'user' ? styles.messageRowUser : styles.messageRowBot)
+            }}
+          >
+            <div style={message.type === 'user' ? styles.messageBubbleUser : styles.messageBubbleBot}>
+              <p style={styles.messageText}>{message.content}</p>
+              <span style={{
+                ...styles.timestamp,
+                ...(message.type === 'user' ? styles.timestampUser : styles.timestampBot)
+              }}>
+                {message.timestamp.toLocaleTimeString()}
+              </span>
+            </div>
+          </div>
+        ))}
+        
+        {loading && (
+          <div style={{ ...styles.messageRow, ...styles.messageRowBot }}>
+            <div style={styles.messageBubbleBot}>
+              <div style={styles.loadingDots}>
+                <div style={styles.dot}></div>
+                <div style={styles.dot}></div>
+                <div style={styles.dot}></div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={styles.inputContainer}>
+        <form onSubmit={handleSubmit} style={styles.inputForm}>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask Anything ..."
+            style={styles.input}
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            disabled={loading || !input.trim()}
+            style={{
+              ...styles.sendButton,
+              ...(loading || !input.trim() ? styles.sendButtonDisabled : {})
+            }}
+            onMouseEnter={(e) => {
+              if (!loading && input.trim()) {
+                Object.assign(e.currentTarget.style, styles.sendButtonHover)
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(-50%)'
+            }}
+          >
+            <SendHorizontal size={20} />
+          </button>
+        </form>
+        
+        {/* Suggestion Chips */}
+        {!loading && (
+          <div style={styles.suggestionsContainer}>
+            {suggestions.map((suggestion, index) => {
+              const IconComponent = suggestion.icon
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleSuggestionClick(suggestion.query)}
+                  style={styles.suggestionChip}
+                  onMouseEnter={(e) => {
+                    Object.assign(e.currentTarget.style, styles.suggestionChipHover)
+                  }}
+                  onMouseLeave={(e) => {
+                    Object.assign(e.currentTarget.style, styles.suggestionChip)
+                  }}
+                >
+                  <IconComponent size={18} />
+                  <span>{suggestion.label}</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default App

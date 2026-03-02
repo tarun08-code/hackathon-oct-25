@@ -1,0 +1,46 @@
+{
+  "session_id": "0ecd7eb2-ae13-4113-8fe3-e9216eb3a963",
+  "user_email": "sarah.lee@abc-company.com",
+  "created_at": "2025-10-16T16:33:06.744206",
+  "last_activity": "2025-10-16T16:33:25.414453",
+  "conversation_history": [
+    {
+      "type": "user",
+      "content": "sarah.lee@abc-company.com",
+      "timestamp": "2025-10-16T16:33:06.831140",
+      "id": 1
+    },
+    {
+      "type": "bot",
+      "content": "\u2705 Authentication Successful\n\nEmployee Details:\n- Name: Sarah Lee\n- Email: sarah.lee@abc-company.com\n- Employee ID: EMP006\n- Designation: Director\n- Level: Manager\n- Department: Sales\n\nPurchase Eligibility:\n- Budget: $10,000\n- Approved Items: Apple MacBook (any model approved by IT department), Company Car (vehicle lease, insurance, regular servicing and maintenance)",
+      "timestamp": "2025-10-16T16:33:06.850834",
+      "id": 2
+    },
+    {
+      "type": "user",
+      "content": "which llm is being used in the backedn",
+      "timestamp": "2025-10-16T16:33:25.380889",
+      "id": 3
+    },
+    {
+      "type": "bot",
+      "content": "Hi there! I'm Elig AI, your employee eligibility assistant.\n\nTo answer your question, I'm Elig AI, and I'm powered by Google Gemini AI.\n\nIs there anything I can help you with regarding employee purchase eligibility or product recommendations today?",
+      "timestamp": "2025-10-16T16:33:25.399108",
+      "id": 4
+    }
+  ],
+  "user_context": {
+    "authenticated": true,
+    "employee_data": {
+      "email_id": "sarah.lee@abc-company.com",
+      "employee_id": "EMP006",
+      "name": "Sarah Lee",
+      "designation": "Director",
+      "employee_level": "Manager",
+      "department": "Sales"
+    },
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}

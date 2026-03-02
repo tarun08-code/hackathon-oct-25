@@ -1,0 +1,48 @@
+{
+  "policy_name": "PaperShare Asset Purchase Policy",
+  "version": "1.0",
+  "effective_date": "2025-01-01",
+  "policy_rules": {
+    "Manager": {
+      "level_name": "Manager",
+      "purchase_limit": 10000,
+      "currency": "USD",
+      "approved_items": [
+        "Apple MacBook (any model approved by IT department)",
+        "Company Car (vehicle lease, insurance, regular servicing and maintenance)"
+      ],
+      "approval_required": false,
+      "notes": "Managers can submit multiple purchase requests during the year, provided the total combined value does not exceed the yearly limit"
+    },
+    "Senior IC": {
+      "level_name": "Senior IC (Individual Contributor)",
+      "purchase_limit": 10000,
+      "currency": "USD",
+      "approved_items": [
+        "Apple MacBook for development and engineering activities",
+        "Company Car (basis of business justification and department approval)"
+      ],
+      "approval_required": true,
+      "approval_level": "line manager",
+      "notes": "Where a car is requested, the Senior IC must provide a short business justification and obtain approval from their line manager"
+    },
+    "IC": {
+      "level_name": "IC (Individual Contributor)",
+      "purchase_limit": 3000,
+      "currency": "USD",
+      "approved_items": [
+        "Lenovo Laptop (standard specification as defined by IT department)"
+      ],
+      "approval_required": true,
+      "approval_level": "department head",
+      "notes": "Any additional requests outside the standard laptop must be escalated to the department head for consideration"
+    }
+  },
+  "general_notes": [
+    "All purchases must comply with the Procurement Guidelines of PaperShare",
+    "All purchases require pre-approval via the internal Purchase Request System",
+    "The company reserves the right to amend this policy at any time",
+    "Policy is applicable to all permanent employees of PaperShare",
+    "Purchase limits are per fiscal year"
+  ]
+}

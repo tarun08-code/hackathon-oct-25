@@ -1,0 +1,14 @@
+{
+  "session_id": "1845d54c-ee8c-4cc5-9b19-eb32c7b3cb2c",
+  "user_email": null,
+  "created_at": "2025-10-16T16:48:14.612170",
+  "last_activity": "2025-10-16T16:48:14.660289",
+  "conversation_history": [],
+  "user_context": {
+    "authenticated": false,
+    "employee_data": null,
+    "preferences": {},
+    "search_history": []
+  },
+  "session_state": "active"
+}
